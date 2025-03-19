@@ -1,5 +1,5 @@
 body {
-    font-family: 'Roboto', sans-serif; /* Ensure you include the font in your project */
+    font-family: 'Poppins', sans-serif; 
     background-color: #3d4435;
 }
 
@@ -12,35 +12,53 @@ body {
 
 .navbar .logo {
     text-align: center;
-    flex-grow: 1; /* Center the logo */
+    flex-grow: 1;
 }
 
 .navbar .links {
     display: flex;
-    gap: 1rem; /* Space between links */
+    gap: 1rem;
 }
 
 .header {
     color: white;
-    font-size: 2rem; /* Adjust size as needed */
-    position: absolute; /* Adjust positioning as needed */
-    top: 20px; /* Adjust based on your design */
-    left: 20px; /* Adjust based on your design */
+    font-size: 2rem; 
+    position: absolute; 
+    top: 20px; 
+    left: 20px; 
 }
 
-.image-container {
-    width: 3in; /* Fixed width for the image */
-    float: left; /* Align to the left */
-}
+.image{
+    max-width: 200px;
+    max-height: 200px;
+    margin: 10px;
+    display: block;
+  }
 
 .textbox {
-    margin-left: 1rem; /* Space beside the image */
-    float: left; /* Align to the left */
+    margin-left: 1rem;
+    float: left; 
 }
 
 .call-to-action {
     display: block;
-    text-align: center; /* Center the text */
-    margin-top: 2rem; /* Space above */
-    color: white; /* Adjust color as needed */
+    text-align: center; 
+    margin-top: 2rem; 
+    color: rgb(222, 92, 17); 
+}
+.call-to-action {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: hsl(37, 62%, 55%); 
+    color: #cb6415; 
+    border: none; 
+    border-radius: 5px; 
+    text-align: center; 
+    text-decoration: none; 
+    cursor: pointer; 
+    transition: background-color 0.3s ease;
+}
+
+.call-to-action:hover {
+    background-color: hsl(35, 100%, 35%); 
 }

@@ -3,7 +3,9 @@
 body {
     font-family: 'Roboto', sans-serif; 
     background-color: #3d4435;
-    color: #fff;
+    color: #6e6363;
+    font-weight: 400;
+    font-size: 18px;
 }
 html {
     font-family: sans-serif;
@@ -27,4 +29,27 @@ html {
   button {
   padding: 5px 20px;
   margin: 10px 0;
+}
+
+.button {
+    background-color: #3d4435;
+    color: #6e6363;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+.button:hover {
+    background-color: #6e6363;
+    color: #3d4435;
+}
+@media (max-wididth: 600px) {
+  .image-class{
+    width: 100%;
+    height: auto; 
+  }
 }
