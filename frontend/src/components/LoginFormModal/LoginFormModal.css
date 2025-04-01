@@ -1,0 +1,66 @@
+.login-modal {
+    background-color: #c4b376; 
+    padding: 20px; 
+    border-radius: 5px; 
+    box-shadow: 10px 10px #3d4435; 
+    width: 300px; 
+    margin: auto; 
+}
+
+.login-modal h1 {
+    margin-bottom: 20px; 
+    font-size: 1.5em; 
+}
+
+.login-modal form {
+    display: flex; 
+    flex-direction: column; 
+}
+
+.login-modal label {
+    margin-bottom: 10px; 
+}
+
+.login-modal input {
+    background-color:#dfd7b8; 
+    padding: 10px;
+    margin-bottom: 15px;
+    box-shadow: 2px 2px #3d4435; 
+    border: 1px solid ; 
+    border-radius: 10px; 
+}
+
+.login-modal button {
+    background-color: #3d4435; 
+    color: white; 
+    padding: 10px; 
+    border: none; 
+    border-radius: 10px; 
+    cursor: pointer; 
+    transition: background-color 0.3s;
+}
+
+.login-modal button:hover {
+    background-color: #dfd7b8; 
+}
+
+.error-message {
+    color: red; 
+    margin-top: -10px; 
+    margin-bottom: 15px; 
+}
+
+.demo-button {
+    background-color: #6c757d; 
+    color: rgb(222, 89, 89); 
+    padding: 10px; 
+    border: none; 
+    border-radius: 10px; 
+    cursor: pointer; 
+    transition: background-color 0.3s; 
+    margin-top: 10px; 
+}
+
+.demo-button:hover {
+    background-color: #5a6268; 
+}

@@ -1,0 +1,19 @@
+.review {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px 0;
+    background-color: #d9bfa1;
+}
+
+.star-rating {
+    color: gold; 
+}
+
+.star-icon {
+    font-size: 16px; 
+}
+
+.star-icon.empty {
+    color: rgb(93, 90, 90); 
+}

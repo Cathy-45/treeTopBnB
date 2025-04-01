@@ -15,6 +15,7 @@ function SignupFormModal() {
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
 
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (password === confirmPassword) {
@@ -42,8 +43,9 @@ function SignupFormModal() {
   };
 
   return (
-    <>
-      <h1>Sign Up</h1>
+    
+    <div className="signup-modal">
+         <h1>Sign Up</h1>
       <form onSubmit={handleSubmit}>
         <label>
           Email
@@ -109,7 +111,8 @@ function SignupFormModal() {
         )}
         <button type="submit">Sign Up</button>
       </form>
-    </>
+    
+    </div>
   );
 }
 

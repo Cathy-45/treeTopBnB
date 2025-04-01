@@ -1,0 +1,60 @@
+
+.signup-modal {
+    width: 400px;
+    margin: 0 auto;
+    padding: 50px;
+    background-color: #c4b376;
+    border-radius: 1px;
+    box-shadow: 10px 10px #3d4435;
+}
+
+.signup-modal h1 {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.signup-modal label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.signup-modal input[type="text"],
+.signup-modal input[type="password"] {
+    background-color:#dfd7b8; ;
+    color: #c4b376;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 2px solid #3d4435;
+    border-radius: 10px;
+    font-size: 16px;
+}
+
+.signup-modal input[type="text"]:focus,
+.signup-modal input[type="password"]:focus {
+    border-color: #3d4435;
+    outline: none;
+    
+}
+
+.signup-modal p {
+    color: red;
+    font-size: 14px;
+}
+
+.signup-modal button {
+    width: 100%;
+    padding: 10px;
+    background-color: #3d4435;
+    color: rgb(144, 138, 138);
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.signup-modal button:hover {
+    background-color:  #c4b376;
+}

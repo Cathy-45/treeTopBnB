@@ -1,0 +1,38 @@
+
+.spots__container{
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+h1{
+    font: size 2em;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.spot-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; 
+}
+
+.spot-tile {
+    border: 1px solid #ddd; 
+    border-radius: 8px; 
+    padding: 10px; 
+    cursor: pointer; 
+    transition: box-shadow 0.3s; 
+}
+
+.spot-tile:hover {
+    box-shadow: 10px 10px rgba(103, 80, 80, 0.1); 
+}
+
+.spot-actions {
+    margin-top: 20px;
+    
+}

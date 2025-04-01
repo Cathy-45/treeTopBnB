@@ -1,45 +1,91 @@
-// frontend/src/components/Navigation/Navigation.jsx
-
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import ProfileButton from './ProfileButton';
+import NavIcon from '../NavIcon'; // Import NavIcon component
 import './Navigation.css';
 import logo from '../../images/logo.png';
+import { FaArrowLeft, FaArrowRight, FaHome, FaSearch, FaTimes } from 'react-icons/fa'; // Importing required icons
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 function Navigation({ isLoaded }) {
-  const sessionUser = useSelector(state => state.session.user);
+    const sessionUser = useSelector(state => state.session.user);
+    const location = useLocation(); 
+    const navigate = useNavigate(); 
 
-  return (
-<nav className="navbarContainer">
-
-    <div className="navbar__logo">
-    <img src={logo} alt="logo"/>
-  </div>
-
-
+    const isLandingPage = location.pathname === '/';
     
-    <ul>
-      <li>
-        <NavLink to="/">Home</NavLink>
-        <ul className="navbar__links">
-       <NavLink className='navLink' to="/" >Spots</NavLink> 
-        <NavLink className='navLink' to="/booking">SpotDetails</NavLink>
-        <NavLink className='navLink'to="/spotDetails">Reviews</NavLink>
-        <NavLink className='navLink'to="/spotListings">SignUp</NavLink>
-        <NavLink className='navLink'to="/reviews">Reviews</NavLink>
-      
-      </ul>
 
-      </li>
-      {isLoaded && (
-        <li>
-          <ProfileButton user={sessionUser} />
-        </li>
-      )}
-    </ul>
-  </nav>
-  );
+    const [searchQuery, setSearchQuery] = useState('');
 
+    const handleIconClick = (iconType) => {
+        switch (iconType) {
+            case 'search':
+                // Implement the search functionality
+                if (searchQuery.trim()) {
+                    navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
+                } else {
+                    console.log('Please enter a search query');
+                }
+                break;
+            case 'home':
+                navigate('/'); 
+                break;
+            case 'arrowLeft':
+                window.history.back(); 
+                break;
+            case 'arrowRight':
+                window.history.forward(); 
+                break;
+            case 'close':
+                console.log('Close clicked'); 
+                break;
+            default:
+                break;
+        }
+    };
+
+    return (
+        <nav className="navbarContainer">
+            
+            {!isLandingPage && (
+                <div className="navbar_top">
+                    <div className="navigation_controls">
+                        <NavIcon Icon={FaArrowLeft} onClick={() => handleIconClick('arrowLeft')} className="nav_icon" />
+                        <NavIcon Icon={FaArrowRight} onClick={() => handleIconClick('arrowRight')} className="nav_icon" />
+                        <NavIcon Icon={FaTimes} onClick={() => handleIconClick('close')} className="nav_icon" />
+                        <NavIcon Icon={FaHome} onClick={() => handleIconClick('home')} className="nav_icon" />
+                        
+                        
+                        <input 
+                            type="text" 
+                            placeholder="Search..." 
+                            value={searchQuery} 
+                            onChange={(e) => setSearchQuery(e.target.value)} 
+                            className="search_input"
+                        />
+                        <NavIcon Icon={FaSearch} onClick={() => handleIconClick('search')} className="search_icon" />
+                    </div>
+                </div>
+            )}
+            <div className="navbar_logo">
+                <NavLink to="/" style={{ display: 'flex', alignItems: 'center' }}>
+                    <img src={logo} alt="logo" className="logo" />
+                    <span className="treeTopBnB">treeTopBnB</span>
+                </NavLink>
+            </div>
+            <div className="navbar_right">
+            {isLoaded && sessionUser && (
+                    <NavLink to="/createspot" className="create-spot-link">
+                        Create A New Spot
+                    </NavLink>
+                )}
+                {isLoaded && (<ProfileButton user={sessionUser} />
+            )}
+                
+            </div>
+        </nav>
+    );
 }
 
 export default Navigation;

@@ -1,25 +1,20 @@
 import { Link } from 'react-router-dom';
 import outdoorImage from '../../images/outdoors.jpg';
-
+import './LandingPage.css';
 
 const LandingPage = () => {
     return (
-        <div>
-            <div className="navbar">
-                <div className="links">
-                    <Link to="/">Link1</Link>
-                    <Link to="/">Link2</Link>
-                    <Link to="/">Link3</Link>
-                    <Link to="/">Link4</Link>
-                </div>
+        <div className="landing-page">
+            <header className="header">
+                <h1>Welcome to TreetopBnB</h1>
+                <h2>Your Home Away From Home!</h2>
+            </header>
+            <div className="image-container">
+                <img src={outdoorImage} alt="Blissful Outdoors" className="landing-image" />
             </div>
-            <div className="header">ELEVATED STAY TREETOP CABINS</div>
-            <div className="image">
-                <img src={outdoorImage} alt="Blissful Outdoors" />
-            </div>
-            <div className="textbox">
-                <p>Our Selene Interiors stand as an unparalleled emblem of our service to our clients. It is our belief that your time away from home is met by our excellent service!</p>
-            </div>
+            <p className="description">
+                Our Selene Interiors stand as an unparalleled emblem of our service to our clients. It is our belief that your time away from home is met by our excellent service!
+            </p>
             <Link className="call-to-action button" to="/spots">View All Spots</Link>
         </div>
     );

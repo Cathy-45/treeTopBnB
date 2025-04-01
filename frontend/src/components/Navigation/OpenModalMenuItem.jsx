@@ -1,22 +1,27 @@
 
 import { useModal } from '../../context/Modal';
+import { useNavigate } from 'react-router-dom';
 
-function OpenModalMenuItem({
-  modalComponent, // component to render inside the modal
-  itemText, // text of the menu item that opens the modal
-  onItemClick, // optional: callback function that will be called once the menu item that opens the modal is clicked
-  onModalClose // optional: callback function that will be called once the modal is closed
-}) {
+
+
+function OpenModalMenuItem({ modalComponent, itemText, onItemClick, onModalClose }) {
+  console.log('OpenModalMenuItemrendered');
   const { setModalContent, setOnModalClose } = useModal();
+  const navigate = useNavigate(); // Initialize navigate
 
   const onClick = () => {
-    if (onModalClose) setOnModalClose(onModalClose);
-    setModalContent(modalComponent);
-    if (typeof onItemClick === "function") onItemClick();
+      if (onModalClose) setOnModalClose(onModalClose);
+      setModalContent(modalComponent);
+      if (typeof onItemClick === "function") onItemClick();
   };
 
   return (
-    <li onClick={onClick}>{itemText}</li>
+      <ul>
+          <li onClick={onClick}>{itemText}</li>
+          {/* Add Manage Spots option */}
+          <li onClick={() => navigate('/managespots')}>Manage Spots</li>
+          
+      </ul>
   );
 }
 

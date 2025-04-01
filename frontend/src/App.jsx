@@ -9,8 +9,17 @@ import LandingPage from './components/LandingPage';
 import './index.css';
 import LoginFormModal from './components/LoginFormModal';
 import Spots from './components/Spots/Spots';
-import SpotDetails from './components/SpotDetails/SpotDetails';
-
+import CreateSpot from './components/CreateSpot/CreateSpot';
+import GetSpotdetails from './components/GetSpotdetails';
+import UpdateSpot from './components/UpdateSpot/UpdateSpot';
+import ReviewFormModal from './components/ReviewFormModal';
+import ManageSpots from './components/ManageSpots';
+import ManageSpotTile from './components/ManageSpotTile/ManageSpotTile';
+import DeleteSpot from './components/DeleteSpot';
+import ConfirmationModal from './components/ConfirmationModal';
+import ReviewList from './components/ReviewList';
+import Review from './components/Review';
+import DeleteReview from './components/DeleteReview';
 
 function Layout() {
   const dispatch = useDispatch();
@@ -34,6 +43,13 @@ const router = createBrowserRouter([
   {
     element: <Layout />,
     children: [
+
+
+      {
+        path: '/login',
+        element: <LoginFormModal />,
+      },
+
       {
         path: '/',
         element: <LandingPage />,
@@ -41,20 +57,64 @@ const router = createBrowserRouter([
 
       {
         path: '/Spots',
-        element: < Spots/>,
+        element: < Spots />,
 
       },
+
       {
-         path: '/spots/:id',
-          element: <SpotDetails />,
+        path: '/Spots/:id',
+        element: <GetSpotdetails />,
+      },
+
+      {
+        path: '/createspot',
+        element: <CreateSpot />,
+
+      },
+
+      {
+        path: '/updatespot/:id',
+        element: < UpdateSpot />,
+      },
+
+      {
+        path: '/delete/:id',
+        element: <DeleteSpot />,
+      },
+
+     {
+       path: '/confirmationmodal',
+       element:<ConfirmationModal/>,
+     },
+     {
+         path: '/spots/:spotId/review',
+         element: <Review/>
+     },
+      
+      {
+        path: '/delete/:spotId/review',
+        element: <DeleteReview/>
       },
 
 
+
+     {
+      path: '/spots/:spotId/reviews',
+      element: <ReviewList/>
+     },
+
       {
-        path: '/login',
-        element: <LoginFormModal />
+        path: '/reviewformModal',
+        element: <ReviewFormModal />,
+      },
+      {
+        path: '/managespots',
+        element: <ManageSpots />,
+      },
+      {
+        path: '/mangespottile',
+        element: <ManageSpotTile />
       }
-
 
 
     ]

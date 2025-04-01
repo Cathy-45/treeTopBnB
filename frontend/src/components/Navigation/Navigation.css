@@ -1,0 +1,88 @@
+/* Navigation.css */
+.navbarContainer {
+    display: flex;
+    flex-direction: column; 
+    align-items: stretch; 
+    padding: 10px 20px;
+   
+}
+
+.navbar_top {
+    display: flex; 
+    justify-content: flex-start; 
+    background-color: #ddc18c; 
+    padding: 10px; 
+    border-radius:5px;
+}
+
+.navigation_controls {
+    display: flex; 
+    flex-grow: 1; 
+    align-items: center; 
+}
+
+.nav_icon {
+    margin-right: 15px; 
+    cursor: pointer; 
+}
+
+.search_input {
+    background-color:#ddc8a1;  
+    flex-grow: 1; 
+    margin-right: 10px; 
+    padding: 5px; 
+    border: 2px solid #3d4435; 
+    border-radius: 10px; 
+}
+
+.search_icon {
+    cursor: pointer; 
+}
+
+/* Navigation.css */
+.navbar_logo {
+    display: flex;
+    align-items: center;
+    font-weight: bold; 
+}
+
+.navbar_logo a{
+    text-decoration: none;
+    color: #7e6e61;
+}
+.logo {
+    width: 100px;
+    height: auto;
+    margin-right: 10px;
+}
+
+.site_name {
+    font-size: 24px;
+    font-weight: bold; 
+    color: #c76a22; 
+    text-decoration: none;
+}
+
+.navbar_right {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    
+    
+}
+
+.navbar_right {
+    display: flex;
+    align-items: center; 
+}
+
+.create-spot-link {
+    margin-right: 20px; 
+    text-decoration: none;
+    color: #746255;
+    font-weight: bold; 
+}
+
+.create-spot-link:hover {
+    text-decoration: underline; 
+}

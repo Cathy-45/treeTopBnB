@@ -1,3 +1,63 @@
 .hidden {
  visibility: hidden; ;
 }
+
+.profile-dropdown {
+    position: absolute; 
+    top: 40px; 
+    right: 0; 
+    background-color: #3d4435;
+    border: 5px solid #3d4435; 
+    border-radius: 5px; 
+    box-shadow: 10px 10px rgba(0, 0, 0, 0.1); 
+    z-index: 1000; 
+    padding: 10px 0; 
+    width: 200px; 
+}
+
+.profile-dropdown li {
+    background-color: #ddc18c; 
+    list-style: none; 
+    padding: 8px 12px; 
+    cursor: pointer;
+}
+
+.profile-dropdown li:hover {
+    background-color: #3d4435; 
+}
+
+.profile-dropdown button {
+    background: none;
+    border: none;
+    padding: 0; 
+    cursor: pointer;
+    color: #3d4435; 
+    text-align: left; 
+    width: 100%;
+}
+
+.profile-dropdown button:hover {
+    text-decoration: underline;
+}
+
+button {
+    background: none; 
+    border: none; 
+    cursor: pointer;
+    font-size: 24px;
+    color: #333; 
+}
+
+@media (max-width: 768px) {
+    .profile-button {
+        top: 15px; 
+        right: 15px; 
+    }
+}
+
+@media (min-width: 769px) {
+    .profile-button {
+        top: 20px; 
+        right: 20px; 
+    }
+}

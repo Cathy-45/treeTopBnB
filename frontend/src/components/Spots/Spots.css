@@ -34,6 +34,7 @@
 
 .spot_info {
     padding: 16px;
+    
 }
 
 .spot_location {
@@ -44,13 +45,13 @@
 
 .spot_rating {
     font-size: 14px;
-    color: #ffcc00; 
+    color: #aa9e6c; 
     margin-bottom: 8px;
 }
 
 .spot_price {
     font-size: 16px;
-    color: #333; 
+    color: #9f8b7c; 
     font-weight: bold;
 }
 

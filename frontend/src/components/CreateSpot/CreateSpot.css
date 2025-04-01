@@ -1,0 +1,59 @@
+
+.create-spot {
+    background-color: #c4b376; 
+    padding: 20px; 
+    border-radius: 8px; 
+    box-shadow: 10px 10px  rgba(0, 0, 0, 0.1); 
+    max-width: 600px; 
+    margin: 20px auto; 
+}
+
+
+.create-spot h1, .create-spot h2 {
+    color: #333; 
+}
+
+
+.create-spot input[type="text"],
+.create-spot input[type="number"],
+.create-spot textarea {
+    background-color:#dfd7b8; 
+    width: 50%;
+    padding: 10px; 
+    margin: 10px 0; 
+    border: 2px solid #3d4435;
+    border-radius: 10px;
+    font-size: 16px; 
+}
+.create-spot input[type="text"]:focus,
+.create-spot input[type="number"]:focus,
+.create-spot textarea:focus {
+    border-color: #3d4435; 
+    outline: none; 
+}
+
+
+.error {
+    color: red; 
+    font-size: 14px; 
+    margin-top: -5px; 
+    margin-bottom: 10px; 
+}
+
+
+.create-spot button {
+    background-color: #3d4435;;
+    color: white; 
+    padding: 10px 15px;
+    border: none; 
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 50px;
+    
+}
+
+
+.create-spot button:hover {
+    background-color: #775720;
+}
