@@ -1,63 +1,72 @@
+.profile-button-wrap {
+    position: relative;
+}
+
+.profile-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    margin: 0;
+    border-radius: 50%;
+    background-color: var(--bg-surface-alt);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    font-size: 18px;
+}
+
+.profile-toggle:hover {
+    background-color: var(--accent-soft);
+    border-color: var(--accent-soft-border);
+}
+
 .hidden {
- visibility: hidden; ;
+    display: none;
 }
 
 .profile-dropdown {
-    position: absolute; 
-    top: 40px; 
-    right: 0; 
-    background-color: #3d4435;
-    border: 5px solid #3d4435; 
-    border-radius: 5px; 
-    box-shadow: 10px 10px rgba(0, 0, 0, 0.1); 
-    z-index: 1000; 
-    padding: 10px 0; 
-    width: 200px; 
+    position: absolute;
+    top: 50px;
+    right: 0;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    z-index: 1000;
+    padding: 8px;
+    width: 220px;
+    list-style: none;
+    margin: 0;
 }
 
 .profile-dropdown li {
-    background-color: #ddc18c; 
-    list-style: none; 
-    padding: 8px 12px; 
-    cursor: pointer;
+    list-style: none;
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    font-size: 14px;
 }
 
-.profile-dropdown li:hover {
-    background-color: #3d4435; 
+.profile-dropdown li.profile-dropdown-item:hover {
+    background-color: var(--bg-surface-alt);
+    cursor: pointer;
 }
 
 .profile-dropdown button {
     background: none;
     border: none;
-    padding: 0; 
+    padding: 0;
+    margin: 0;
     cursor: pointer;
-    color: #3d4435; 
-    text-align: left; 
+    color: var(--text-primary);
+    text-align: left;
     width: 100%;
+    font-weight: 500;
 }
 
 .profile-dropdown button:hover {
+    background: none;
     text-decoration: underline;
-}
-
-button {
-    background: none; 
-    border: none; 
-    cursor: pointer;
-    font-size: 24px;
-    color: #333; 
-}
-
-@media (max-width: 768px) {
-    .profile-button {
-        top: 15px; 
-        right: 15px; 
-    }
-}
-
-@media (min-width: 769px) {
-    .profile-button {
-        top: 20px; 
-        right: 20px; 
-    }
 }

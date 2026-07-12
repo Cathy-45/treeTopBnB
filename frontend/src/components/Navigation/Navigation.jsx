@@ -1,88 +1,52 @@
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import ProfileButton from './ProfileButton';
-import NavIcon from '../NavIcon'; // Import NavIcon component
 import './Navigation.css';
 import logo from '../../images/logo.png';
-import { FaArrowLeft, FaArrowRight, FaHome, FaSearch, FaTimes } from 'react-icons/fa'; // Importing required icons
+import { FaSearch } from 'react-icons/fa';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 
 function Navigation({ isLoaded }) {
     const sessionUser = useSelector(state => state.session.user);
-    const location = useLocation(); 
-    const navigate = useNavigate(); 
-
-    const isLandingPage = location.pathname === '/';
-    
+    const navigate = useNavigate();
 
     const [searchQuery, setSearchQuery] = useState('');
 
-    const handleIconClick = (iconType) => {
-        switch (iconType) {
-            case 'search':
-                // Implement the search functionality
-                if (searchQuery.trim()) {
-                    navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
-                } else {
-                    console.log('Please enter a search query');
-                }
-                break;
-            case 'home':
-                navigate('/'); 
-                break;
-            case 'arrowLeft':
-                window.history.back(); 
-                break;
-            case 'arrowRight':
-                window.history.forward(); 
-                break;
-            case 'close':
-                console.log('Close clicked'); 
-                break;
-            default:
-                break;
+    const handleSearchSubmit = (e) => {
+        e.preventDefault();
+        if (searchQuery.trim()) {
+            navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
         }
     };
 
     return (
         <nav className="navbarContainer">
-            
-            {!isLandingPage && (
-                <div className="navbar_top">
-                    <div className="navigation_controls">
-                        <NavIcon Icon={FaArrowLeft} onClick={() => handleIconClick('arrowLeft')} className="nav_icon" />
-                        <NavIcon Icon={FaArrowRight} onClick={() => handleIconClick('arrowRight')} className="nav_icon" />
-                        <NavIcon Icon={FaTimes} onClick={() => handleIconClick('close')} className="nav_icon" />
-                        <NavIcon Icon={FaHome} onClick={() => handleIconClick('home')} className="nav_icon" />
-                        
-                        
-                        <input 
-                            type="text" 
-                            placeholder="Search..." 
-                            value={searchQuery} 
-                            onChange={(e) => setSearchQuery(e.target.value)} 
-                            className="search_input"
-                        />
-                        <NavIcon Icon={FaSearch} onClick={() => handleIconClick('search')} className="search_icon" />
-                    </div>
-                </div>
-            )}
-            <div className="navbar_logo">
-                <NavLink to="/" style={{ display: 'flex', alignItems: 'center' }}>
-                    <img src={logo} alt="logo" className="logo" />
-                    <span className="treeTopBnB">treeTopBnB</span>
+            <div className="navbar_inner">
+                <NavLink to="/" className="navbar_logo">
+                    <img src={logo} alt="ZedBnB logo" className="logo" />
+                    <span className="site_name">ZedBnB</span>
                 </NavLink>
-            </div>
-            <div className="navbar_right">
-            {isLoaded && sessionUser && (
-                    <NavLink to="/createspot" className="create-spot-link">
-                        Create A New Spot
-                    </NavLink>
-                )}
-                {isLoaded && (<ProfileButton user={sessionUser} />
-            )}
-                
+
+                <form className="navbar_search" onSubmit={handleSearchSubmit}>
+                    <FaSearch className="search_icon" onClick={handleSearchSubmit} />
+                    <input
+                        type="text"
+                        placeholder="Search by city..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="search_input"
+                    />
+                </form>
+
+                <div className="navbar_right">
+                    {isLoaded && sessionUser && (
+                        <NavLink to="/createspot" className="create-spot-link">
+                            List your property
+                        </NavLink>
+                    )}
+                    {isLoaded && (<ProfileButton user={sessionUser} />)}
+                </div>
             </div>
         </nav>
     );

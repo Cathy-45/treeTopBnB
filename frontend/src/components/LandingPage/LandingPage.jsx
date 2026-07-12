@@ -1,21 +1,40 @@
-import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import outdoorImage from '../../images/outdoors.jpg';
+import Spots from '../Spots';
+import SpotCarousel from '../Carousel/SpotCarousel';
+import { getAllSpotsThunk } from '../../store/spots';
 import './LandingPage.css';
 
 const LandingPage = () => {
+    const dispatch = useDispatch();
+    const allSpots = useSelector((state) => state.spots.allSpots);
+
+    useEffect(() => {
+        dispatch(getAllSpotsThunk());
+    }, [dispatch]);
+
+    const featured = [...(allSpots || [])]
+        .sort((a, b) => (b.avgRating || 0) - (a.avgRating || 0))
+        .slice(0, 8);
+
     return (
         <div className="landing-page">
-            <header className="header">
-                <h1>Welcome to TreetopBnB</h1>
-                <h2>Your Home Away From Home!</h2>
-            </header>
-            <div className="image-container">
-                <img src={outdoorImage} alt="Blissful Outdoors" className="landing-image" />
+            <div className="hero" style={{ backgroundImage: `url(${outdoorImage})` }}>
+                <div className="hero-overlay">
+                    <h1>Find your stay in Zambia</h1>
+                    <p>Real places, listed directly by the people who own them.</p>
+                </div>
             </div>
-            <p className="description">
-                Our Selene Interiors stand as an unparalleled emblem of our service to our clients. It is our belief that your time away from home is met by our excellent service!
-            </p>
-            <Link className="call-to-action button" to="/spots">View All Spots</Link>
+
+            <div className="landing-listings">
+                {featured.length > 0 && (
+                    <SpotCarousel spots={featured} title="Featured stays" />
+                )}
+
+                <h2 className="section-heading">Explore stays</h2>
+                <Spots />
+            </div>
         </div>
     );
 };

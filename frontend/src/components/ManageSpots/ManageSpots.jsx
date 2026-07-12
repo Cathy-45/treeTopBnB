@@ -43,26 +43,28 @@ const ManageSpots = () => {
     if (!isLoaded) return <div>Loading...</div>;
 
     return (
-        <div className='spots_container'>
+        <div className='manage-spots-page'>
             <h1>Manage Spots</h1>
             {allSpots.length === 0 ? (
-                <div>
+                <div className="manage-spots-empty">
                     <p>You have not posted any spots yet.</p>
-                    <Link to="/createspot">Create a New Spot</Link>
+                    <Link to="/createspot" className="button">Create a New Spot</Link>
                 </div>
             ) : (
-                allSpots.map((spot) => (
-                    <ManageSpotTile 
-                        key={spot.id} 
-                        spot={spot} 
-                        onDeleteClick={handleDeleteClick} 
-                    />
-                ))
+                <div className="manage-spots-grid">
+                    {allSpots.map((spot) => (
+                        <ManageSpotTile
+                            key={spot.id}
+                            spot={spot}
+                            onDeleteClick={handleDeleteClick}
+                        />
+                    ))}
+                </div>
             )}
-            <ConfirmationModal 
-                isOpen={isModalOpen} 
-                onClose={handleModalClose} 
-                onConfirm={handleDeleteConfirm} 
+            <ConfirmationModal
+                isOpen={isModalOpen}
+                onClose={handleModalClose}
+                onConfirm={handleDeleteConfirm}
             />
         </div>
     );

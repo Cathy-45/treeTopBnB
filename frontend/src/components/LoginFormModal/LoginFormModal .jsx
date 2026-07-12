@@ -9,12 +9,11 @@ function LoginFormModal() {
     const { closeModal } = useModal();
     const [credential, setCredential] = useState('');
     const [password, setPassword] = useState('');
-    const [errors, setErrors] = useState([]);
-    const [showReset, setShowReset] = useState(false); 
+    const [errors, setErrors] = useState({});
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setErrors([]);
+        setErrors({});
         return dispatch(sessionActions.login({ credential, password }))
             .then(closeModal)
             .catch(async (res) => {
@@ -26,10 +25,8 @@ function LoginFormModal() {
     };
 
     const handleDemoLogin = async () => {
-        const demoCredential = 'Demo-lition';
-        const demoPassword = 'password';
-        setErrors([]);
-        return dispatch(sessionActions.login(demoCredential, demoPassword))
+        setErrors({});
+        return dispatch(sessionActions.login({ credential: 'Demo-lition', password: 'password' }))
             .then(closeModal)
             .catch(async (res) => {
                 const data = await res.json();
@@ -37,19 +34,6 @@ function LoginFormModal() {
                     setErrors(data.errors);
                 }
             });
-    };
-
-    const handlePasswordReset = async (e) => {
-        e.preventDefault();
-       
-      
-        const response = await dispatch(sessionActions.resetPassword({ credential })); 
-        if (response.success) {
-            alert('Password reset email sent!'); 
-            setShowReset(false); 
-        } else {
-            setErrors(response.errors); 
-        }
     };
 
     return (
@@ -80,29 +64,6 @@ function LoginFormModal() {
                     Log In as Demo User
                 </button>
             </form>
-            <button onClick={() => setShowReset(true)}>Forgot Password?</button>
-
-            {showReset && (
-                <div className="reset-modal">
-                    <h2>Password Reset</h2>
-                    <form onSubmit={handlePasswordReset}>
-                        <label>
-                            Enter your email to reset password:
-                            <input
-                                type="text"
-                                value={credential}
-                                onChange={(e) => setCredential(e.target.value)}
-                                required
-                            />
-                        </label>
-                        <button type="submit">Send Reset Link</button>
-                        <button type="button" onClick={() => setShowReset(false)}>Cancel</button>
-                        {errors.map((error, idx) => (
-                            <p key={idx} className="error-message">{error}</p>
-                        ))}
-                    </form>
-                </div>
-            )}
         </div>
     );
 }

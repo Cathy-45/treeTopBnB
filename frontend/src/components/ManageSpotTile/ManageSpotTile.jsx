@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
-import './ManageSpotTile.css'; 
+import outdoorImage from '../../images/outdoors.jpg';
+import './ManageSpotTile.css';
 
 const ManageSpotTile = ({ spot, onDeleteClick }) => {
     const navigate = useNavigate();
@@ -20,16 +21,24 @@ const ManageSpotTile = ({ spot, onDeleteClick }) => {
 
     return (
         <div className="spot-tile" onClick={handleSpotClick}>
-            <img src={spot.imagesUrl} alt={spot.name} className='spot_image' />
+            <img
+                src={spot.previewImage || outdoorImage}
+                alt={spot.name}
+                className='spot_image'
+                onError={(e) => { e.target.onerror = null; e.target.src = outdoorImage; }}
+            />
             <div className='spot_details'>
                 <div className='spot_location'>{spot.city}, {spot.state}</div>
-                <div className='spot_rating'><span className='star-icon'>⭐</span>{spot.rating ? `Rating: ${spot.rating}` : '4.8'}</div>
-                
+                <div className='rating'>
+                    <span className='star-icon'>⭐</span>
+                    {spot.avgRating ? Number(spot.avgRating).toFixed(1) : 'New'}
+                </div>
+
                 <div className='spot_price'>${spot.price} per night</div>
-                
-                <div className="button-container"> 
+
+                <div className="button-container">
                     <button onClick={handleUpdateClick}>Update</button>
-                    <button onClick={handleDeleteClick}>Delete</button>
+                    <button className="delete-btn" onClick={handleDeleteClick}>Delete</button>
                 </div>
             </div>
         </div>

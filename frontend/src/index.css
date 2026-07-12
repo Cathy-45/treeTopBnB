@@ -1,56 +1,185 @@
-/* TODO: Add sitewide styles */
+/* ==========================================================================
+   Namzeforge / ZedBnB design system
+   Shares its core tokens (bg + gold accent) with the FarmLink Zambia
+   product so the two projects read as one family.
+   ========================================================================== */
+
+:root {
+  --bg-page: #1e2419;
+  --bg-surface: #2d3426;
+  --bg-surface-alt: #3d4435;
+  --bg-elevated: #333c2a;
+
+  --text-primary: #f5f3ee;
+  --text-secondary: rgba(245, 243, 238, 0.72);
+  --text-muted: rgba(245, 243, 238, 0.45);
+
+  --accent: #da6d20;
+  --accent-hover: #c76a22;
+  --accent-soft: rgba(218, 109, 32, 0.15);
+  --accent-soft-border: rgba(218, 109, 32, 0.35);
+
+  --danger: #e05252;
+  --danger-soft: rgba(224, 82, 82, 0.15);
+  --success: #4caf50;
+
+  --border: rgba(255, 255, 255, 0.12);
+  --border-soft: rgba(255, 255, 255, 0.08);
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-pill: 999px;
+
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.45);
+
+  --font-body: 'Roboto', 'Segoe UI', sans-serif;
+  --max-width: 1180px;
+
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: var(--font-body);
+  overflow-x: hidden;
+}
 
 body {
-    font-family: 'Roboto', sans-serif; 
-    background-color: #3d4435;
-    color: #6e6363;
-    font-weight: 400;
-    font-size: 18px;
+  margin: 0;
+  font-family: var(--font-body);
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.5;
+  min-height: 100vh;
+  overflow-x: hidden;
+  max-width: 100vw;
 }
-html {
-    font-family: sans-serif;
-  }
-  
-  h1 {
-    text-transform: capitalize;
-  }
-  
-  .img {
-    max-width: 100px;
-    max-height: 100px;
-    margin: 10px;
-    display: block;
-  }
+
+img {
+  max-width: 100%;
+}
+
+h1, h2, h3, h4 {
+  margin: 0 0 8px 0;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+h1 { text-transform: capitalize; }
+
+p {
+  margin: 0 0 8px 0;
+  color: var(--text-secondary);
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+a:hover {
+  color: var(--accent-hover);
+}
+
+.img {
+  max-width: 100px;
+  max-height: 100px;
+  margin: 10px;
+  display: block;
+}
 
 .error {
-    color: red;
-  }
-  
-  button {
-  padding: 5px 20px;
-  margin: 10px 0;
+  color: var(--danger);
+  font-size: 14px;
+  margin: 4px 0;
+}
+
+/* ---- Buttons ---- */
+button {
+  font-family: var(--font-body);
+  padding: 10px 20px;
+  margin: 0;
+  border: none;
+  border-radius: var(--radius-pill);
+  background-color: var(--accent);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.1s ease, opacity 0.15s ease;
+}
+button:hover {
+  background-color: var(--accent-hover);
+}
+button:active {
+  transform: scale(0.98);
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .button {
-    background-color: #3d4435;
-    color: #6e6363;
-    border: none;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
+  background-color: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 10px 22px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
 }
 .button:hover {
-    background-color: #6e6363;
-    color: #3d4435;
-}
-@media (max-wididth: 600px) {
-  .image-class{
-    width: 100%;
-    height: auto; 
-  }
+  background-color: var(--accent-hover);
+  color: #fff;
 }
 
+/* ---- Generic surfaces ---- */
+.card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ---- Inputs ---- */
+input,
+textarea,
+select {
+  font-family: var(--font-body);
+  background-color: var(--bg-surface-alt);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  font-size: 15px;
+  width: 100%;
+}
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-muted);
+}
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+@media (max-width: 600px) {
+  .image-class {
+    width: 100%;
+    height: auto;
+  }
+}

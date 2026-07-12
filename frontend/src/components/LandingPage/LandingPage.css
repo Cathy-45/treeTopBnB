@@ -1,48 +1,68 @@
-/* LandingPage.css */
 .landing-page {
     display: flex;
     flex-direction: column;
-    align-items: center; 
-    text-align: center; 
-    max-width: 600px; 
-    margin: 50px auto; 
-    padding: 20px; 
-    background-color:#3d4435;
-    border-radius: 8px; 
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
 }
 
-.header {
-    margin-bottom: 20px; 
+.hero {
+    height: 340px;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: flex-end;
+    position: relative;
 }
 
-
-.landing-image {
-    max-width: 100%; 
-    height: auto; 
-    border-radius: 8px;
+.hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(30, 36, 25, 0.15) 0%, rgba(30, 36, 25, 0.92) 100%);
 }
 
-.description {
-    margin: 20px 0; 
-    font-size: 16px; 
+.hero-overlay {
+    position: relative;
+    z-index: 1;
+    max-width: var(--max-width);
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 24px 32px;
 }
 
-.call-to-action.button {
-    display: inline-block; 
-    padding: 10px 20px; 
-    background-color: #da6d20; 
-    color: rgb(96, 87, 87); 
-    text-decoration: none; 
-    border-radius: 10px; 
-    margin-top: 10px; 
+.hero-overlay h1 {
+    font-size: 36px;
+    margin-bottom: 6px;
 }
 
-.call-to-action.button:hover {
-    background-color: #cdb17c; 
+.hero-overlay p {
+    color: var(--text-secondary);
+    font-size: 16px;
+    margin: 0;
 }
 
-.navbar_logo img.logo {
-    width: 100px; 
-    height: auto; 
+.landing-listings {
+    max-width: var(--max-width);
+    width: 100%;
+    margin: 0 auto;
+    padding: 32px 24px 60px;
+    box-sizing: border-box;
+}
+
+.section-heading {
+    font-size: 22px;
+    margin-bottom: 18px;
+}
+
+@media (max-width: 600px) {
+    .hero {
+        height: 240px;
+    }
+    .hero-overlay h1 {
+        font-size: 26px;
+    }
+    .hero-overlay p {
+        font-size: 14px;
+    }
+    .landing-listings {
+        padding: 24px 16px 40px;
+    }
 }

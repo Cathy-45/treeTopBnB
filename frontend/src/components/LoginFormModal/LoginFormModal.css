@@ -1,66 +1,66 @@
 .login-modal {
-    background-color: #c4b376; 
-    padding: 20px; 
-    border-radius: 5px; 
-    box-shadow: 10px 10px #3d4435; 
-    width: 300px; 
-    margin: auto; 
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border);
+    padding: 32px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    width: min(320px, 90vw);
+    max-height: 90vh;
+    overflow-y: auto;
+    margin: auto;
+    box-sizing: border-box;
+}
+
+@media (max-width: 480px) {
+    .login-modal {
+        padding: 24px;
+    }
 }
 
 .login-modal h1 {
-    margin-bottom: 20px; 
-    font-size: 1.5em; 
+    margin-bottom: 20px;
+    font-size: 1.4em;
 }
 
 .login-modal form {
-    display: flex; 
-    flex-direction: column; 
+    display: flex;
+    flex-direction: column;
 }
 
 .login-modal label {
-    margin-bottom: 10px; 
+    margin-bottom: 14px;
+    font-size: 14px;
+    color: var(--text-secondary);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
 
 .login-modal input {
-    background-color:#dfd7b8; 
-    padding: 10px;
-    margin-bottom: 15px;
-    box-shadow: 2px 2px #3d4435; 
-    border: 1px solid ; 
-    border-radius: 10px; 
+    background-color: var(--bg-surface-alt);
+    color: var(--text-primary);
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
 }
 
 .login-modal button {
-    background-color: #3d4435; 
-    color: white; 
-    padding: 10px; 
-    border: none; 
-    border-radius: 10px; 
-    cursor: pointer; 
-    transition: background-color 0.3s;
+    width: 100%;
+    margin-bottom: 10px;
 }
 
-.login-modal button:hover {
-    background-color: #dfd7b8; 
+.login-modal .demo-button {
+    background-color: var(--bg-surface-alt);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+}
+
+.login-modal .demo-button:hover {
+    background-color: var(--bg-elevated);
 }
 
 .error-message {
-    color: red; 
-    margin-top: -10px; 
-    margin-bottom: 15px; 
-}
-
-.demo-button {
-    background-color: #6c757d; 
-    color: rgb(222, 89, 89); 
-    padding: 10px; 
-    border: none; 
-    border-radius: 10px; 
-    cursor: pointer; 
-    transition: background-color 0.3s; 
-    margin-top: 10px; 
-}
-
-.demo-button:hover {
-    background-color: #5a6268; 
+    color: var(--danger);
+    font-size: 13px;
+    margin: -6px 0 10px;
 }

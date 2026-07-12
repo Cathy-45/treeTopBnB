@@ -1,0 +1,80 @@
+.spot-carousel {
+    margin-bottom: 40px;
+}
+
+.spot-carousel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.spot-carousel-header .section-heading {
+    margin: 0;
+}
+
+.spot-carousel-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.carousel-arrow-flat {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background-color: var(--bg-surface-alt);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.carousel-arrow-flat:hover {
+    background-color: var(--bg-elevated);
+}
+
+.carousel-arrow-flat:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+.spot-carousel-track {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+}
+
+.spot-carousel-track::-webkit-scrollbar {
+    display: none;
+}
+
+.spot-carousel-card {
+    flex: 0 0 240px;
+    scroll-snap-align: start;
+    text-decoration: none;
+    color: inherit;
+    transition: opacity 0.15s ease;
+}
+
+.spot-carousel-card:hover {
+    opacity: 0.92;
+}
+
+.spot-carousel-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+    background-color: var(--bg-surface-alt);
+    display: block;
+}
+
+.spot-carousel-card-info {
+    padding: 10px 2px 0;
+}

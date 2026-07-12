@@ -4,20 +4,66 @@ import { useNavigate } from 'react-router-dom';
 import { createSpotThunk, addSpotImageThunk } from '../../store/spots';
 import './CreateSpot.css';
 
+// Zambia's 10 provinces
+const ZAMBIA_PROVINCES = [
+    'Central',
+    'Copperbelt',
+    'Eastern',
+    'Luapula',
+    'Lusaka',
+    'Muchinga',
+    'North-Western',
+    'Northern',
+    'Southern',
+    'Western',
+];
+
+// Real Lusaka neighborhoods, offered as suggestions for the street address field
+const LUSAKA_SUBURBS = [
+    'Kabulonga',
+    'Roma',
+    'Woodlands',
+    'Longacres',
+    'Rhodes Park',
+    'Ibex Hill',
+    'Makeni',
+    'Kabwata',
+    'Chilenje',
+    'Avondale',
+    'Kalundu',
+    'Kamwala',
+    'Chelston',
+    'Chalala',
+];
+
+// Major Zambian towns/cities, offered as suggestions for the city field
+const ZAMBIA_CITIES = [
+    'Lusaka',
+    'Kitwe',
+    'Ndola',
+    'Kabwe',
+    'Chingola',
+    'Livingstone',
+    'Mufulira',
+    'Luanshya',
+    'Chipata',
+    'Choma',
+];
+
 const CreateSpot = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [form, setForm] = useState({
-        country: '',
+        country: 'Zambia',
         streetAddress: '',
-        city: '',
-        state: '',
+        city: 'Lusaka',
+        state: 'Lusaka',
         description: '',
         spotTitle: '',
         price: '',
-        imageUrls: ['', ''], 
-        lat: '',
-        lng: '',
+        imageUrls: ['', ''],
+        lat: '-15.3875',
+        lng: '28.3228',
     });
     const [errors, setErrors] = useState({});
 
@@ -43,7 +89,7 @@ const CreateSpot = () => {
         if (!form.country) newErrors.country = "Country is required";
         if (!form.streetAddress) newErrors.streetAddress = "Street Address is required";
         if (!form.city) newErrors.city = "City is required";
-        if (!form.state) newErrors.state = "State is required";
+        if (!form.state) newErrors.state = "Province is required";
         if (form.description.length < 30) newErrors.description = "Description needs 30 or more characters";
         if (!form.spotTitle) newErrors.spotTitle = "Name of your spot is required";
         if (!form.price) newErrors.price = "Price per night is required";
@@ -101,42 +147,69 @@ const CreateSpot = () => {
                     type="text"
                     placeholder="Country"
                     value={form.country}
-                    onChange={(e) => handleInputChange(e, 'country')}
+                    disabled
+                    readOnly
                 />
+                <p className="field-hint">ZedBnB currently lists properties in Zambia only.</p>
                 {errors.country && <p className="error">{errors.country}</p>}
+
                 <input
                     type="text"
-                    placeholder="Street Address"
+                    list="lusaka-suburbs"
+                    placeholder="e.g. Plot 24, Kabulonga Road"
                     value={form.streetAddress}
                     onChange={(e) => handleInputChange(e, 'streetAddress')}
                 />
+                <datalist id="lusaka-suburbs">
+                    {LUSAKA_SUBURBS.map((suburb) => (
+                        <option key={suburb} value={suburb} />
+                    ))}
+                </datalist>
                 {errors.streetAddress && <p className="error">{errors.streetAddress}</p>}
-                <input
-                    type="text"
-                    placeholder="City"
-                    value={form.city}
-                    onChange={(e) => handleInputChange(e, 'city')}
-                />
+
+                <div className="field-row">
+                    <input
+                        type="text"
+                        list="zambia-cities"
+                        placeholder="City or town"
+                        value={form.city}
+                        onChange={(e) => handleInputChange(e, 'city')}
+                    />
+                    <datalist id="zambia-cities">
+                        {ZAMBIA_CITIES.map((city) => (
+                            <option key={city} value={city} />
+                        ))}
+                    </datalist>
+
+                    <select
+                        value={form.state}
+                        onChange={(e) => handleInputChange(e, 'state')}
+                    >
+                        {ZAMBIA_PROVINCES.map((province) => (
+                            <option key={province} value={province}>{province}</option>
+                        ))}
+                    </select>
+                </div>
                 {errors.city && <p className="error">{errors.city}</p>}
-                <input
-                    type="text"
-                    placeholder="State"
-                    value={form.state}
-                    onChange={(e) => handleInputChange(e, 'state')}
-                />
                 {errors.state && <p className="error">{errors.state}</p>}
-                <input
-                    type="number"
-                    placeholder="Latitude"
-                    value={form.lat}
-                    onChange={(e) => handleInputChange(e, 'lat')}
-                />
-                <input
-                    type="number"
-                    placeholder="Longitude"
-                    value={form.lng}
-                    onChange={(e) => handleInputChange(e, 'lng')}
-                />
+
+                <div className="field-row">
+                    <input
+                        type="number"
+                        step="any"
+                        placeholder="Latitude"
+                        value={form.lat}
+                        onChange={(e) => handleInputChange(e, 'lat')}
+                    />
+                    <input
+                        type="number"
+                        step="any"
+                        placeholder="Longitude"
+                        value={form.lng}
+                        onChange={(e) => handleInputChange(e, 'lng')}
+                    />
+                </div>
+                <p className="field-hint">Defaults to central Lusaka (-15.3875, 28.3228) — adjust to your property&apos;s real location.</p>
 
                 <h2>Describe your place to guests</h2>
                 <p>Mention the best features of your space, any special amenities like fast wifi or parking, and what you love about the neighborhood.</p>

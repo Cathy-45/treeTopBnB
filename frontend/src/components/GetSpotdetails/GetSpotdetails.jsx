@@ -6,6 +6,7 @@ import { getSpotdetailsThunk, loadReviewsThunk, postReviewThunk } from '../../st
 import './GetSpotDetails.css';
 import ReviewFormModal from '../ReviewFormModal';
 import BookSpot from '../BookSpot';
+import ImageCarousel from '../Carousel/ImageCarousel';
 import largeImage from '../../images/outdoorsImage.png';
 import smallImage1 from '../../images/cliffhouse.png';
 import smallImage2 from '../../images/treetop.png';
@@ -63,94 +64,75 @@ const GetSpotDetails = () => {
         ? currentSpot.SpotImages
         : null;
     const gallery = spotImages
-        ? [spotImages[0]?.url, ...spotImages.slice(1, 5).map((img) => img.url)]
+        ? spotImages.map((img) => img.url)
         : [largeImage, smallImage1, smallImage2, smallImage3, smallImage4];
 
     return (
         <div className="spot-details">
-            <h2>{name}</h2>
-            <p>Location: {city}, {state}, {country}</p>
-
-            <div className="container">
-                <h2 className="title"></h2>
-                <div className="photo-gallery">
-                    <div className="column">
-                        <div className="photo">
-                            <img src={gallery[0]} alt={name} className="large-image" />
-                        </div>
-                    </div>
-                    <div className="column">
-                        {gallery.slice(1).map((src, i) => (
-                            <div className="photo" key={i}>
-                                <img src={src} alt={`${name} view ${i + 2}`} />
-                            </div>
-                        ))}
-                    </div>
+            <div className="spot-details-header">
+                <h1>{name}</h1>
+                <div className="spot-details-subheader">
+                    <span className="star-rating-inline">
+                        ⭐ {averageRating || 'New'} {reviewCount > 0 && `(${reviewCount})`}
+                    </span>
+                    <span className="dot">·</span>
+                    <span>{city}, {state}, {country}</span>
                 </div>
             </div>
 
-            <div className="callout-info">
-                <div className="host-info">
-                    <p>Hosted by: {host.firstName} {host.lastName}</p>
-                    <p>Description: {description}</p>
+            <ImageCarousel images={gallery} alt={name} fallback={largeImage} />
+
+            <div className="spot-details-body">
+                <div className="spot-details-main">
+                    <div className="host-info">
+                        <h3>Hosted by {host.firstName} {host.lastName}</h3>
+                        <p>{description}</p>
+                    </div>
+
+                    <div className="review-summary">
+                        <h3>
+                            ⭐ {averageRating || 'New'} {reviewCount > 0 && `· ${reviewCount} review${reviewCount === 1 ? '' : 's'}`}
+                        </h3>
+
+                        {reviews.length === 0 ? (
+                            <p>Be the first to post a review!</p>
+                        ) : (
+                            <div className="reviews-list">
+                                {[...reviews].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map((review) => (
+                                    <div key={review.id} className="review">
+                                        <p className="review-meta">
+                                            {review.User?.firstName || 'Guest'}
+                                            {' — '}
+                                            {new Date(review.createdAt).toLocaleString('default', { month: 'long', year: 'numeric' })}
+                                        </p>
+                                        <p>{'★'.repeat(review.stars)} {review.review}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+
+                        {canPostReview && (
+                            <button onClick={() => setIsModalOpen(true)}>Post Your Review</button>
+                        )}
+                        {!isLoggedIn && (
+                            <button onClick={() => alert("Please log in to leave a review.")}>Post A Review</button>
+                        )}
+                    </div>
                 </div>
-                <div className="reserve-info">
-                    <p>Price: ${price} per night</p>
+
+                <aside className="booking-card">
+                    <p className="booking-price">${price} <span>/ night</span></p>
                     {canBook && (
-                        <button onClick={() => setIsBookingOpen(true)}>Reserve</button>
+                        <button className="booking-card-btn" onClick={() => setIsBookingOpen(true)}>Reserve</button>
                     )}
                     {isOwner && (
                         <p className="owner-note">This is your listing.</p>
                     )}
                     {!isLoggedIn && (
-                        <button onClick={() => alert('Please log in to reserve this spot.')}>Reserve</button>
+                        <button className="booking-card-btn" onClick={() => alert('Please log in to reserve this spot.')}>Reserve</button>
                     )}
-                </div>
+                </aside>
             </div>
-
-            <div className="review-summary">
-                <h3>Reviews</h3>
-
-                <div className="star-rating">
-                    {averageRating ? (
-                        <>
-                            {Array.from({ length: Math.floor(averageRating) }, (_, index) => (
-                                <span key={index} className="star-icon filled">★</span>
-                            ))}
-                            {averageRating % 1 !== 0 && <span className="star-icon">☆</span>}
-                            <span> {averageRating}</span>
-                        </>
-                    ) : (
-                        <span>New listing</span>
-                    )}
-                    <span> ({reviewCount})</span>
-                </div>
-            </div>
-
-            {reviews.length === 0 ? (
-                <p>Be the first to post a review!</p>
-            ) : (
-                <div className="reviews-list">
-                    {[...reviews].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map((review) => (
-                        <div key={review.id} className="review">
-                            <p>
-                                {review.User?.firstName || 'Guest'}
-                                {' — '}
-                                {new Date(review.createdAt).toLocaleString('default', { month: 'long', year: 'numeric' })}
-                            </p>
-                            <p>{'★'.repeat(review.stars)} {review.review}</p>
-                        </div>
-                    ))}
-                </div>
-            )}
-
-
-            {canPostReview && (
-                <button onClick={() => setIsModalOpen(true)}>Post Your Review</button>
-            )}
-     {!isLoggedIn &&(
-                <button onClick={() => alert("Please log in to leave a review.")}>Post A Review</button>
-            )}
 
             {isModalOpen && (
                 <ReviewFormModal

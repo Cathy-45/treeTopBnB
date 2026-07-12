@@ -1,8 +1,21 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateSpotThunk } from '../../store/spots'; 
+import { updateSpotThunk } from '../../store/spots';
 import { useParams, Navigate } from 'react-router-dom';
 import './UpdateSpot.css';
+
+const ZAMBIA_PROVINCES = [
+    'Central',
+    'Copperbelt',
+    'Eastern',
+    'Luapula',
+    'Lusaka',
+    'Muchinga',
+    'North-Western',
+    'Northern',
+    'Southern',
+    'Western',
+];
 
 const UpdateSpot = () => {
     const dispatch = useDispatch();
@@ -39,9 +52,9 @@ const UpdateSpot = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        
-        dispatch(updateSpotThunk(id, formData)); 
-        setIsUpdated(true); 
+
+        dispatch(updateSpotThunk(id, { ...formData, country: 'Zambia' }));
+        setIsUpdated(true);
     };
 
     if (!currentSpot) {
@@ -87,23 +100,26 @@ const UpdateSpot = () => {
                     />
                 </div>
                 <div>
-                    <label>State:</label>
-                    <input
-                        type="text"
+                    <label>Province:</label>
+                    <select
                         name="state"
                         value={formData.state}
                         onChange={handleChange}
                         required
-                    />
+                    >
+                        {ZAMBIA_PROVINCES.map((province) => (
+                            <option key={province} value={province}>{province}</option>
+                        ))}
+                    </select>
                 </div>
                 <div>
                     <label>Country:</label>
                     <input
                         type="text"
                         name="country"
-                        value={formData.country}
-                        onChange={handleChange}
-                        required
+                        value={formData.country || 'Zambia'}
+                        disabled
+                        readOnly
                     />
                 </div>
                 <div>
