@@ -2,20 +2,8 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateSpotThunk } from '../../store/spots';
 import { useParams, Navigate } from 'react-router-dom';
+import { ZAMBIA_PROVINCES } from '../../constants/zambiaLocations';
 import './UpdateSpot.css';
-
-const ZAMBIA_PROVINCES = [
-    'Central',
-    'Copperbelt',
-    'Eastern',
-    'Luapula',
-    'Lusaka',
-    'Muchinga',
-    'North-Western',
-    'Northern',
-    'Southern',
-    'Western',
-];
 
 const UpdateSpot = () => {
     const dispatch = useDispatch();

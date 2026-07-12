@@ -2,53 +2,8 @@ import { useDispatch } from 'react-redux';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createSpotThunk, addSpotImageThunk } from '../../store/spots';
+import { ZAMBIA_PROVINCES, ZAMBIA_CITIES, CITY_SUBURBS, CITY_TO_PROVINCE } from '../../constants/zambiaLocations';
 import './CreateSpot.css';
-
-// Zambia's 10 provinces
-const ZAMBIA_PROVINCES = [
-    'Central',
-    'Copperbelt',
-    'Eastern',
-    'Luapula',
-    'Lusaka',
-    'Muchinga',
-    'North-Western',
-    'Northern',
-    'Southern',
-    'Western',
-];
-
-// Real Lusaka neighborhoods, offered as suggestions for the street address field
-const LUSAKA_SUBURBS = [
-    'Kabulonga',
-    'Roma',
-    'Woodlands',
-    'Longacres',
-    'Rhodes Park',
-    'Ibex Hill',
-    'Makeni',
-    'Kabwata',
-    'Chilenje',
-    'Avondale',
-    'Kalundu',
-    'Kamwala',
-    'Chelston',
-    'Chalala',
-];
-
-// Major Zambian towns/cities, offered as suggestions for the city field
-const ZAMBIA_CITIES = [
-    'Lusaka',
-    'Kitwe',
-    'Ndola',
-    'Kabwe',
-    'Chingola',
-    'Livingstone',
-    'Mufulira',
-    'Luanshya',
-    'Chipata',
-    'Choma',
-];
 
 const CreateSpot = () => {
     const dispatch = useDispatch();
@@ -73,6 +28,18 @@ const CreateSpot = () => {
             ...prevForm,
             [fieldName]: value,
         }));
+    };
+
+    const handleCityChange = (e) => {
+        const { value } = e.target;
+        setForm((prevForm) => {
+            const matchedProvince = CITY_TO_PROVINCE[value];
+            return {
+                ...prevForm,
+                city: value,
+                state: matchedProvince || prevForm.state,
+            };
+        });
     };
 
     const handleImageUrlChange = (index, value) => {
@@ -155,13 +122,13 @@ const CreateSpot = () => {
 
                 <input
                     type="text"
-                    list="lusaka-suburbs"
+                    list="suburb-suggestions"
                     placeholder="e.g. Plot 24, Kabulonga Road"
                     value={form.streetAddress}
                     onChange={(e) => handleInputChange(e, 'streetAddress')}
                 />
-                <datalist id="lusaka-suburbs">
-                    {LUSAKA_SUBURBS.map((suburb) => (
+                <datalist id="suburb-suggestions">
+                    {(CITY_SUBURBS[form.city] || []).map((suburb) => (
                         <option key={suburb} value={suburb} />
                     ))}
                 </datalist>
@@ -173,7 +140,7 @@ const CreateSpot = () => {
                         list="zambia-cities"
                         placeholder="City or town"
                         value={form.city}
-                        onChange={(e) => handleInputChange(e, 'city')}
+                        onChange={handleCityChange}
                     />
                     <datalist id="zambia-cities">
                         {ZAMBIA_CITIES.map((city) => (
