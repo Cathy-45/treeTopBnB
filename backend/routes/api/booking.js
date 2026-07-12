@@ -39,7 +39,7 @@ const validateBookingId = (req, res, next) => {
 };
 
 
-  router.get("/current", async (req, res, next) => {
+  router.get("/current", requireAuth, async (req, res, next) => {
     try {
 
 
@@ -84,6 +84,10 @@ router.put("/:bookingId", validateBooking, validateBookingId, requireAuth, async
           return res.status(403).json({ message: "Forbidden" });
         }
 
+        if (new Date(booking.endDate) < new Date()) {
+          return res.status(403).json({ message: "Past bookings can't be modified" });
+        }
+
         const spotId = booking.spotId;
 
         const newBooking = await booking.update({
@@ -110,7 +114,7 @@ router.put("/:bookingId", validateBooking, validateBookingId, requireAuth, async
 
 })
 
-router.delete("/:bookingId", requireAuth, async (req, res, next) => {
+router.delete("/:bookingId", requireAuth, validateBookingId, async (req, res, next) => {
   try {
     const { bookingId } = req.params;
     const booking = await Booking.findByPk(bookingId);
@@ -118,9 +122,18 @@ router.delete("/:bookingId", requireAuth, async (req, res, next) => {
         return res.status(404).json({ message: "Booking couldn't be found" });
     }
 
-    if (booking.userId !== req.user.id) {
+    const spot = await Spot.findByPk(booking.spotId);
+    const isBookingOwner = booking.userId === req.user.id;
+    const isSpotOwner = spot && spot.ownerId === req.user.id;
+
+    if (!isBookingOwner && !isSpotOwner) {
         return res.status(403).json({ message: "Forbidden" });
     }
+
+    if (new Date(booking.startDate) <= new Date()) {
+        return res.status(403).json({ message: "Bookings that have been started can't be deleted" });
+    }
+
         await booking.destroy();
         return res.status(200).json({ message: "Successfully deleted" });
     } catch (e) {

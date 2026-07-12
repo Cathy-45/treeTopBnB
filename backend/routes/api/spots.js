@@ -14,7 +14,7 @@ const {
   User,
   Owner,
 } = require("../../db/models");
-const { EmptyResultError } = require("sequelize");
+const { EmptyResultError, Op } = require("sequelize");
 const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
 const router = express.Router();
@@ -59,25 +59,65 @@ router.get("/", async (req, res, next) => {
     let { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } =
       req.query;
 
-    page = parseInt(page);
-    size = parseInt(size);
+    const errors = {};
 
-    if (Number.isNaN(page) || !page) page = 1;
-    if (Number.isNaN(size) || !size) size = 20;
+    page = page === undefined ? 1 : Number(page);
+    size = size === undefined ? 20 : Number(size);
 
-    // if (page < 1 || page > 10) {
-    //   return res
-    //     .status(404)
-    //     .json({ message: "Page must be greater than or equal to 1" });
-    // }
+    if (!Number.isInteger(page) || page < 1) {
+      errors.page = "Page must be greater than or equal to 1";
+    }
+    if (!Number.isInteger(size) || size < 1 || size > 20) {
+      errors.size = "Size must be between 1 and 20";
+    }
 
-    // if (size < 1 || size > 10) {
-    //   return res
-    //     .status(404)
-    //     .json({ message: "Size must be greater than or equal to 1" });
-    // }
+    const where = {};
+    if (minLat !== undefined || maxLat !== undefined) {
+      where.lat = {};
+      if (minLat !== undefined) {
+        const v = Number(minLat);
+        if (Number.isNaN(v) || v < -90 || v > 90) errors.minLat = "Minimum latitude is invalid";
+        else where.lat[Op.gte] = v;
+      }
+      if (maxLat !== undefined) {
+        const v = Number(maxLat);
+        if (Number.isNaN(v) || v < -90 || v > 90) errors.maxLat = "Maximum latitude is invalid";
+        else where.lat[Op.lte] = v;
+      }
+    }
+    if (minLng !== undefined || maxLng !== undefined) {
+      where.lng = {};
+      if (minLng !== undefined) {
+        const v = Number(minLng);
+        if (Number.isNaN(v) || v < -180 || v > 180) errors.minLng = "Minimum longitude is invalid";
+        else where.lng[Op.gte] = v;
+      }
+      if (maxLng !== undefined) {
+        const v = Number(maxLng);
+        if (Number.isNaN(v) || v < -180 || v > 180) errors.maxLng = "Maximum longitude is invalid";
+        else where.lng[Op.lte] = v;
+      }
+    }
+    if (minPrice !== undefined || maxPrice !== undefined) {
+      where.price = {};
+      if (minPrice !== undefined) {
+        const v = Number(minPrice);
+        if (Number.isNaN(v) || v < 0) errors.minPrice = "Minimum price must be greater than or equal to 0";
+        else where.price[Op.gte] = v;
+      }
+      if (maxPrice !== undefined) {
+        const v = Number(maxPrice);
+        if (Number.isNaN(v) || v < 0) errors.maxPrice = "Maximum price must be greater than or equal to 0";
+        else where.price[Op.lte] = v;
+      }
+    }
+
+    if (Object.keys(errors).length > 0) {
+      return res.status(400).json({ message: "Bad Request", errors });
+    }
 
     const allSpots = await Spot.findAll({
+      where,
       include: [{ model: Review }, { model: SpotImage }],
       limit: size,
       offset: size * (page - 1),
@@ -111,7 +151,7 @@ router.get("/", async (req, res, next) => {
       };
     });
 
-    res.json({ Spots: formattedSpots });
+    res.json({ Spots: formattedSpots, page, size });
   } catch (e) {
     next(e);
   }
@@ -146,7 +186,8 @@ router.get("/:spotId", validateSpotId, async (req, res, next) => {
     oneSpotReviews.forEach((element) => {
       accumulator += Number(element.stars);
     });
-    let avgReviewRating = accumulator / oneSpotReviews.length;
+    let avgReviewRating =
+      oneSpotReviews.length > 0 ? accumulator / oneSpotReviews.length : null;
 
     const oneSpot = await Spot.findOne({
       where: {
@@ -218,7 +259,7 @@ router.get("/:spotId/reviews", validateSpotId, async (req, res, next) => {
   }
 });
 
-router.get("/:spotId/bookings", async (req, res, next) => {
+router.get("/:spotId/bookings", requireAuth, async (req, res, next) => {
   const { spotId } = req.params;
 
   try {
@@ -485,7 +526,7 @@ router.post(
         },
       });
       if (userReview) {
-        res
+        return res
           .status(500)
           .json({ message: "User already has a review for this spot" });
       }

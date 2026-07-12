@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createSpotThunk } from '../../store/spots';
+import { createSpotThunk, addSpotImageThunk } from '../../store/spots';
 import './CreateSpot.css';
 
 const CreateSpot = () => {
@@ -75,11 +75,19 @@ const CreateSpot = () => {
         try {
             const createdSpot = await dispatch(createSpotThunk(payload));
             if (createdSpot) {
-                navigate(`/spots/${createdSpot.id}`); 
+                const urls = form.imageUrls.filter((url) => url && url.trim());
+                for (let i = 0; i < urls.length; i++) {
+                    try {
+                        await dispatch(addSpotImageThunk(createdSpot.id, urls[i], i === 0));
+                    } catch (imgErr) {
+                        console.error('Error attaching image to new spot:', imgErr);
+                    }
+                }
+                navigate(`/spots/${createdSpot.id}`);
             }
         } catch (error) {
             console.error('Error creating spot:', error);
-            
+            setErrors({ submit: 'Something went wrong creating your spot. Please try again.' });
         }
     };
 
@@ -174,6 +182,7 @@ const CreateSpot = () => {
                         onChange={(e) => handleImageUrlChange(idx + 1, e.target.value)}
                     />
                 ))}
+                {errors.submit && <p className="error">{errors.submit}</p>}
                 <button type="submit">Create Spot</button>
             </form>
         </div>

@@ -160,6 +160,30 @@ export const createSpotThunk = (newSpot) => async (dispatch) => {
 };
 
 
+//addSpotImageThunk
+export const addSpotImageThunk = (spotId, url, preview) => async (dispatch) => {
+    try {
+        const response = await csrfFetch(`/api/spots/${spotId}/images`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ url, preview }),
+        });
+
+        if (response.ok) {
+            const image = await response.json();
+            dispatch({ type: 'ADD_SPOT_IMAGE', payload: { spotId, image, preview } });
+            return image;
+        } else {
+            throw new Error('Failed to add image');
+        }
+    } catch (e) {
+        console.error('Error adding spot image:', e);
+        throw e;
+    }
+};
+
 //loadReviewsThunk
 
 export const loadReviewsThunk = (spotId) => async (dispatch) => {
@@ -185,16 +209,21 @@ export const postReviewThunk = (spotId, reviewData) => async (dispatch) => {
             },
             body: JSON.stringify(reviewData),
         });
-
-        if (response.ok) {
-            const data = await response.json();
-            dispatch({ type: 'ADD_REVIEW', payload: { spotId, review: data } });
-        } else {
-            const errorData = await response.json(); // Get error data for better debugging
-            console.error('Failed to post review:', errorData);
+        const data = await response.json();
+        dispatch({ type: 'ADD_REVIEW', payload: { spotId, review: data } });
+        return data;
+    } catch (err) {
+        // csrfFetch throws the raw Response for any 4xx/5xx status, so unwrap
+        // it here and rethrow a real Error the calling form can display.
+        let message = 'Could not post your review. Please try again.';
+        if (err && typeof err.json === 'function') {
+            try {
+                const errorData = await err.json();
+                message = errorData?.message || message;
+            } catch (_) { /* fall back to generic message */ }
         }
-    } catch (error) {
-        console.error('Error posting review:', error); // Log any network or other errors
+        console.error('Error posting review:', message);
+        throw new Error(message);
     }
 };
 
@@ -313,6 +342,22 @@ const spotsReducer = (state = initialState, action) => {
             };
             return newState;
         }
+        // ADD_SPOT_IMAGE Reducer
+        case 'ADD_SPOT_IMAGE': {
+            const { spotId, image, preview } = action.payload;
+            const existingSpot = state.byId[spotId];
+            const updatedSpot = existingSpot
+                ? { ...existingSpot, previewImage: preview ? image.url : existingSpot.previewImage }
+                : existingSpot;
+            return {
+                ...state,
+                byId: updatedSpot ? { ...state.byId, [spotId]: updatedSpot } : state.byId,
+                currentSpot: state.currentSpot && state.currentSpot.id === spotId
+                    ? { ...state.currentSpot, previewImage: preview ? image.url : state.currentSpot.previewImage }
+                    : state.currentSpot,
+            };
+        }
+
         //Fetchspots Reducer
 
         case FETCH_SPOTS: {
