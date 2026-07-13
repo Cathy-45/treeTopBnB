@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Outlet, Navigate } from 'react-router-dom';
 import Navigation from './components/Navigation';
 import * as sessionActions from './store/session';
 import LandingPage from './components/LandingPage';
@@ -24,6 +24,8 @@ import Experiences from './components/Experiences/Experiences';
 import ExperienceDetails from './components/ExperienceDetails/ExperienceDetails';
 import CreateExperience from './components/CreateExperience/CreateExperience';
 import PaymentCallback from './components/PaymentCallback/PaymentCallback';
+import MyTrips from './components/MyTrips/MyTrips';
+import ManageExperiences from './components/ManageExperiences/ManageExperiences';
 
 function Layout() {
   const dispatch = useDispatch();
@@ -57,6 +59,15 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <LandingPage />,
+      },
+
+      {
+        // ZedBnB's landing page is '/', not '/home' — but FarmLink (the
+        // sister project, same dev habits) uses '/home' for its landing
+        // route, so this redirect exists purely to save a 404 whenever
+        // that muscle memory carries over here.
+        path: '/home',
+        element: <Navigate to="/" replace />,
       },
 
       {
@@ -143,6 +154,16 @@ const router = createBrowserRouter([
       {
         path: '/payment/callback',
         element: <PaymentCallback />,
+      },
+
+      {
+        path: '/trips',
+        element: <MyTrips />,
+      },
+
+      {
+        path: '/manageexperiences',
+        element: <ManageExperiences />,
       },
 
 

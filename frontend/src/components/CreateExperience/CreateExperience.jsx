@@ -104,7 +104,7 @@ const CreateExperience = () => {
                 {errors.city && <p className="error">{errors.city}</p>}
 
                 <h2>Describe the experience</h2>
-                <p>Tell guests what to expect, what's included, and anything they should bring.</p>
+                <p>Tell guests what to expect, what&apos;s included, and anything they should bring.</p>
                 <textarea
                     placeholder="Please write at least 20 characters"
                     value={form.description}

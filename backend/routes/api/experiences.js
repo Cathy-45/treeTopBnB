@@ -86,6 +86,38 @@ router.get("/", async (req, res, next) => {
   }
 });
 
+// GET /api/experiences/current — the signed-in provider's own listed
+// experiences (for Manage Experiences). Must be registered before
+// GET /:experienceId so "current" isn't swallowed as an :experienceId value.
+router.get("/current", requireAuth, async (req, res, next) => {
+  try {
+    const myExperiences = await Experience.findAll({
+      where: { providerId: req.user.id },
+    });
+    res.json({ Experiences: myExperiences.map(formatExperience) });
+  } catch (e) {
+    next(e);
+  }
+});
+
+// GET /api/experiences/bookings/current — the signed-in guest's own
+// experience bookings across every experience (for My Trips). Two path
+// segments, so this doesn't collide with GET /:experienceId or
+// GET /:experienceId/bookings regardless of registration order, but it's
+// kept up here next to /current for readability.
+router.get("/bookings/current", requireAuth, async (req, res, next) => {
+  try {
+    const myBookings = await ExperienceBooking.findAll({
+      where: { userId: req.user.id },
+      include: [{ model: Experience }],
+      order: [["date", "ASC"]],
+    });
+    res.json(myBookings);
+  } catch (e) {
+    next(e);
+  }
+});
+
 // GET /api/experiences/:experienceId
 router.get("/:experienceId", validateExperienceId, async (req, res, next) => {
   try {

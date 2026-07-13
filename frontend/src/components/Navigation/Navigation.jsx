@@ -49,6 +49,11 @@ function Navigation({ isLoaded }) {
                             List your property
                         </NavLink>
                     )}
+                    {isLoaded && sessionUser && (
+                        <NavLink to="/createexperience" className="create-experience-link">
+                            Host an experience
+                        </NavLink>
+                    )}
                     {isLoaded && (<ProfileButton user={sessionUser} />)}
                 </div>
             </div>

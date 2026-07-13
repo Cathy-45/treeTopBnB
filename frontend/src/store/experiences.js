@@ -7,6 +7,8 @@ const CREATE_EXPERIENCE = 'experiences/CREATE_EXPERIENCE';
 const UPDATE_EXPERIENCE = 'experiences/UPDATE_EXPERIENCE';
 const DELETE_EXPERIENCE = 'experiences/DELETE_EXPERIENCE';
 const ADD_EXPERIENCE_BOOKING = 'experiences/ADD_EXPERIENCE_BOOKING';
+const SET_MY_EXPERIENCES = 'experiences/SET_MY_EXPERIENCES';
+const SET_CURRENT_USER_EXPERIENCE_BOOKINGS = 'experiences/SET_CURRENT_USER_EXPERIENCE_BOOKINGS';
 
 // ---- Action Creators ----
 export const getAllExperiences = (experiences) => ({
@@ -32,6 +34,16 @@ export const updateExperience = (experience) => ({
 export const deleteExperience = (experienceId) => ({
     type: DELETE_EXPERIENCE,
     payload: experienceId,
+});
+
+export const setMyExperiences = (experiences) => ({
+    type: SET_MY_EXPERIENCES,
+    payload: experiences,
+});
+
+export const setCurrentUserExperienceBookings = (bookings) => ({
+    type: SET_CURRENT_USER_EXPERIENCE_BOOKINGS,
+    payload: bookings,
 });
 
 // ---- Thunks ----
@@ -140,15 +152,50 @@ export const checkExperienceBookingPaymentThunk = (bookingId) => async () => {
     return response.json();
 };
 
+// The signed-in provider's own listed experiences — for Manage Experiences.
+export const getCurrentUserExperiencesThunk = () => async (dispatch) => {
+    try {
+        const response = await csrfFetch('/api/experiences/current');
+        const data = await response.json();
+        dispatch(setMyExperiences(data.Experiences || []));
+        return data;
+    } catch (err) {
+        console.error('Error fetching your experiences:', err);
+    }
+};
+
+// The signed-in guest's own experience bookings across every experience —
+// for My Trips.
+export const getCurrentUserExperienceBookingsThunk = () => async (dispatch) => {
+    try {
+        const response = await csrfFetch('/api/experiences/bookings/current');
+        const data = await response.json();
+        dispatch(setCurrentUserExperienceBookings(data || []));
+        return data;
+    } catch (err) {
+        console.error('Error fetching your experience bookings:', err);
+    }
+};
+
 // ---- Reducer ----
 const initialState = {
     allExperiences: [],
     byId: {},
     currentExperience: null,
+    myExperiences: [],
+    currentUserBookings: [],
 };
 
 const experiencesReducer = (state = initialState, action) => {
     switch (action.type) {
+        case SET_MY_EXPERIENCES: {
+            return { ...state, myExperiences: action.payload || [] };
+        }
+
+        case SET_CURRENT_USER_EXPERIENCE_BOOKINGS: {
+            return { ...state, currentUserBookings: action.payload || [] };
+        }
+
         case GET_ALL_EXPERIENCES: {
             const experiencesArr = action.payload.Experiences || [];
             const byId = {};
@@ -197,6 +244,7 @@ const experiencesReducer = (state = initialState, action) => {
             return {
                 ...state,
                 allExperiences: state.allExperiences.filter((e) => e.id !== idToDelete),
+                myExperiences: state.myExperiences.filter((e) => e.id !== idToDelete),
                 byId: newById,
             };
         }

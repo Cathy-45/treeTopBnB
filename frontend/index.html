@@ -5,6 +5,12 @@
     <link rel="icon" type="image/x-icon" href="/bnb-1.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>treeTopBnB</title>
+    <style>
+      /* Matches --bg-page in src/index.css — avoids a white flash before
+         the app's stylesheet loads (CSS is JS-injected in Vite dev mode,
+         so it can't paint until after the JS bundle starts executing). */
+      html, body { background-color: #1e2419; }
+    </style>
   </head>
   <body>
     <div id="root"></div>

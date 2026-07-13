@@ -1,0 +1,39 @@
+.manage-experiences-page {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+}
+
+.manage-experiences-page h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.manage-experiences-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+@media (max-width: 900px) {
+    .manage-experiences-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .manage-experiences-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.manage-experiences-empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-muted);
+}
+
+.manage-experiences-empty .button {
+    display: inline-block;
+    margin-top: 12px;
+}

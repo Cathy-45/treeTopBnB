@@ -287,7 +287,7 @@ const CreateSpot = () => {
                 <p className="field-hint">Weekly applies at 7+ nights, monthly at 28+ nights. Leave at 0 to skip.</p>
 
                 <h2>Amenities &amp; security</h2>
-                <p>Zambian guests care about this — let them know what's on offer.</p>
+                <p>Zambian guests care about this — let them know what&apos;s on offer.</p>
                 <div className="amenities-grid">
                     {SPOT_AMENITIES.map(({ key, label, icon, formHint }) => (
                         <label key={key} className="amenity-checkbox">

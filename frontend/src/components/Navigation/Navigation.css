@@ -107,6 +107,7 @@
 }
 
 .create-spot-link,
+.create-experience-link,
 .experiences-link {
     text-decoration: none;
     color: var(--text-primary);
@@ -118,6 +119,7 @@
 }
 
 .create-spot-link:hover,
+.create-experience-link:hover,
 .experiences-link:hover {
     background-color: var(--bg-surface-alt);
     text-decoration: none;
@@ -128,6 +130,7 @@
         flex: 1 1 auto;
     }
     .create-spot-link,
+    .create-experience-link,
     .experiences-link {
         display: none;
     }
