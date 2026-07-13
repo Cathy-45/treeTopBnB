@@ -19,7 +19,7 @@ module.exports = {
         city: 'Mfuwe',
         pricePerPerson: 180,
         durationHours: 4,
-        previewImage: 'https://picsum.photos/seed/luangwasafari/800/600',
+        previewImage: 'https://images.unsplash.com/photo-1532574754390-44dc5c6780bb?auto=format&fit=crop&w=800&q=80',
       },
       {
         // experienceId 2
@@ -30,7 +30,7 @@ module.exports = {
         city: 'Siavonga',
         pricePerPerson: 120,
         durationHours: 3,
-        previewImage: 'https://picsum.photos/seed/zambezicanoe/800/600',
+        previewImage: 'https://images.unsplash.com/photo-1706007989994-7cc0c5a866af?auto=format&fit=crop&w=800&q=80',
       },
       {
         // experienceId 3
@@ -41,7 +41,7 @@ module.exports = {
         city: 'Livingstone',
         pricePerPerson: 45,
         durationHours: 2.5,
-        previewImage: 'https://picsum.photos/seed/vicfallstour/800/600',
+        previewImage: 'https://images.unsplash.com/photo-1636783186942-188af7eb0ef5?auto=format&fit=crop&w=800&q=80',
       },
       {
         // experienceId 4
@@ -52,7 +52,7 @@ module.exports = {
         city: 'Lusaka',
         pricePerPerson: 25,
         durationHours: 1,
-        previewImage: 'https://picsum.photos/seed/lusakatransfer/800/600',
+        previewImage: 'https://images.unsplash.com/photo-1540066019607-e5f69323a8dc?auto=format&fit=crop&w=800&q=80',
       },
       {
         // experienceId 5
@@ -63,7 +63,7 @@ module.exports = {
         city: 'Lusaka',
         pricePerPerson: 60,
         durationHours: 2,
-        previewImage: 'https://picsum.photos/seed/nshimachef/800/600',
+        previewImage: 'https://images.unsplash.com/photo-1593969430003-5dec7c7ee7df?auto=format&fit=crop&w=800&q=80',
       },
       {
         // experienceId 6
@@ -74,7 +74,7 @@ module.exports = {
         city: 'Siavonga',
         pricePerPerson: 90,
         durationHours: 3,
-        previewImage: 'https://picsum.photos/seed/karibacruise/800/600',
+        previewImage: 'https://images.unsplash.com/photo-1604064412467-af16406b5ba5?auto=format&fit=crop&w=800&q=80',
       },
       {
         // experienceId 7
@@ -85,7 +85,7 @@ module.exports = {
         city: 'Kitwe',
         pricePerPerson: 35,
         durationHours: 2,
-        previewImage: 'https://picsum.photos/seed/miningheritage/800/600',
+        previewImage: 'https://images.unsplash.com/photo-1517089472343-85fc51aeb327?auto=format&fit=crop&w=800&q=80',
       },
       {
         // experienceId 8
@@ -96,7 +96,7 @@ module.exports = {
         city: 'Livingstone',
         pricePerPerson: 20,
         durationHours: 1,
-        previewImage: 'https://picsum.photos/seed/livingstoneshuttle/800/600',
+        previewImage: 'https://images.unsplash.com/photo-1581706677636-f6630fd1edf8?auto=format&fit=crop&w=800&q=80',
       },
     ], { validate: true });
   },

@@ -45,6 +45,11 @@ function Navigation({ isLoaded }) {
                         Experiences
                     </NavLink>
                     {isLoaded && sessionUser && (
+                        <NavLink to="/trips" className="trips-link">
+                            My Trips
+                        </NavLink>
+                    )}
+                    {isLoaded && sessionUser && (
                         <NavLink to="/createspot" className="create-spot-link">
                             List your property
                         </NavLink>

@@ -4,9 +4,13 @@
 }
 
 .hero {
-    height: 340px;
+    height: 460px;
     background-size: cover;
-    background-position: center;
+    /* The source photo is a tall portrait shot (trees at top, the lit cabin
+       porch lower down) — "center" was cropping in high enough to only show
+       roofline. Biasing down + a taller hero brings the lights/porch into
+       view while keeping some of the forest context above. */
+    background-position: center 70%;
     display: flex;
     align-items: flex-end;
     position: relative;
@@ -97,7 +101,7 @@
 
 @media (max-width: 600px) {
     .hero {
-        height: 240px;
+        height: 320px;
     }
     .hero-overlay h1 {
         font-size: 26px;

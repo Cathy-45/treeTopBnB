@@ -108,6 +108,7 @@
 
 .create-spot-link,
 .create-experience-link,
+.trips-link,
 .experiences-link {
     text-decoration: none;
     color: var(--text-primary);
@@ -120,6 +121,7 @@
 
 .create-spot-link:hover,
 .create-experience-link:hover,
+.trips-link:hover,
 .experiences-link:hover {
     background-color: var(--bg-surface-alt);
     text-decoration: none;
@@ -131,6 +133,7 @@
     }
     .create-spot-link,
     .create-experience-link,
+    .trips-link,
     .experiences-link {
         display: none;
     }

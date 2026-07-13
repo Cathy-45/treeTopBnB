@@ -56,9 +56,6 @@ function ProfileButton({ user }) {
             <li>{user.username}</li>
             <li>{user.firstName} {user.lastName}</li>
             <li>{user.email}</li>
-            <li className="profile-dropdown-item" onClick={() => { closeMenu(); navigate('/trips'); }}>
-              My Trips
-            </li>
             <li className="profile-dropdown-item" onClick={() => { closeMenu(); navigate('/managespots'); }}>
               Manage Spots
             </li>
