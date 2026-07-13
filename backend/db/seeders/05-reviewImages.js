@@ -21,7 +21,7 @@ module.exports = {
         },
         {
           reviewId: 3,
-          url: "https://www.stockvault.net",
+          url: "https://www.stockvault.net/data/2020/01/18/272608/thumb16.jpg",
         },
       ],
       { validate: true }

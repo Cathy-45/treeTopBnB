@@ -255,14 +255,43 @@ export const updateSpotThunk = (spotId, updatedData) => async (dispatch) => {
             body: JSON.stringify(updatedData),
         });
 
-        if (!response.ok) {
-            throw new Error('Failed to update the spot');
-        }
-
         const updatedSpot = await response.json();
         dispatch({ type: 'UPDATE_SPOT', payload: updatedSpot });
-    } catch (e) {
-        console.error('Error updating spot:', e);
+        return updatedSpot;
+    } catch (err) {
+        // csrfFetch throws the raw Response for any 4xx/5xx status, so unwrap
+        // it here and rethrow a real Error the calling form can display.
+        let message = 'Could not update this spot. Please try again.';
+        if (err && typeof err.json === 'function') {
+            try {
+                const errorData = await err.json();
+                message = errorData?.message || message;
+            } catch (_) { /* fall back to generic message */ }
+        }
+        console.error('Error updating spot:', message);
+        throw new Error(message);
+    }
+};
+
+//deleteSpotImageThunk
+export const deleteSpotImageThunk = (imageId, spotId) => async (dispatch) => {
+    try {
+        const response = await csrfFetch(`/api/spot-images/${imageId}`, {
+            method: 'DELETE',
+        });
+        if (response.ok) {
+            dispatch({ type: 'DELETE_SPOT_IMAGE', payload: { imageId, spotId } });
+        }
+    } catch (err) {
+        let message = 'Could not remove this photo. Please try again.';
+        if (err && typeof err.json === 'function') {
+            try {
+                const errorData = await err.json();
+                message = errorData?.message || message;
+            } catch (_) { /* fall back to generic message */ }
+        }
+        console.error('Error deleting spot image:', message);
+        throw new Error(message);
     }
 };
 //DeleteSpotThunk
@@ -349,11 +378,48 @@ const spotsReducer = (state = initialState, action) => {
             const updatedSpot = existingSpot
                 ? { ...existingSpot, previewImage: preview ? image.url : existingSpot.previewImage }
                 : existingSpot;
+            const currentSpotMatches = state.currentSpot && state.currentSpot.id === Number(spotId);
             return {
                 ...state,
                 byId: updatedSpot ? { ...state.byId, [spotId]: updatedSpot } : state.byId,
-                currentSpot: state.currentSpot && state.currentSpot.id === spotId
-                    ? { ...state.currentSpot, previewImage: preview ? image.url : state.currentSpot.previewImage }
+                currentSpot: currentSpotMatches
+                    ? {
+                        ...state.currentSpot,
+                        previewImage: preview ? image.url : state.currentSpot.previewImage,
+                        SpotImages: [...(state.currentSpot.SpotImages || []), image],
+                    }
+                    : state.currentSpot,
+            };
+        }
+
+        // DELETE_SPOT_IMAGE Reducer
+        case 'DELETE_SPOT_IMAGE': {
+            const { imageId, spotId } = action.payload;
+            const currentSpotMatches = state.currentSpot && state.currentSpot.id === Number(spotId);
+            const remainingImages = currentSpotMatches
+                ? (state.currentSpot.SpotImages || []).filter((img) => img.id !== imageId)
+                : null;
+            const wasPreview = currentSpotMatches
+                && (state.currentSpot.SpotImages || []).find((img) => img.id === imageId)?.preview;
+            const newPreviewUrl = wasPreview ? (remainingImages[0]?.url || null) : undefined;
+
+            const existingSpot = state.byId[spotId];
+            const updatedByIdSpot = existingSpot && newPreviewUrl !== undefined
+                ? { ...existingSpot, previewImage: newPreviewUrl }
+                : existingSpot;
+
+            return {
+                ...state,
+                byId: updatedByIdSpot ? { ...state.byId, [spotId]: updatedByIdSpot } : state.byId,
+                allSpots: newPreviewUrl !== undefined
+                    ? state.allSpots.map((spot) => spot.id === Number(spotId) ? { ...spot, previewImage: newPreviewUrl } : spot)
+                    : state.allSpots,
+                currentSpot: currentSpotMatches
+                    ? {
+                        ...state.currentSpot,
+                        SpotImages: remainingImages,
+                        previewImage: newPreviewUrl !== undefined ? newPreviewUrl : state.currentSpot.previewImage,
+                    }
                     : state.currentSpot,
             };
         }
@@ -373,15 +439,23 @@ const spotsReducer = (state = initialState, action) => {
         }
 
         // UpdateSpot Reducer
+        // The PUT response only contains the core spot fields (no previewImage/avgRating/SpotImages),
+        // so merge onto the existing record rather than replacing it wholesale — otherwise a save
+        // wipes the listing's photo and rating out of the in-memory store until the next full fetch.
         case UPDATE_SPOT: {
             const updatedSpot = action.payload;
+            const existingById = state.byId[updatedSpot.id] || {};
+            const mergedForLists = { ...existingById, ...updatedSpot };
+            const mergedForCurrent = state.currentSpot && state.currentSpot.id === updatedSpot.id
+                ? { ...state.currentSpot, ...updatedSpot }
+                : state.currentSpot;
             return {
                 ...state,
                 allSpots: state.allSpots.map(spot =>
-                    spot.id === updatedSpot.id ? updatedSpot : spot
+                    spot.id === updatedSpot.id ? mergedForLists : spot
                 ),
-                byId: { ...state.byId, [updatedSpot.id]: updatedSpot },
-                currentSpot: updatedSpot,
+                byId: { ...state.byId, [updatedSpot.id]: mergedForLists },
+                currentSpot: mergedForCurrent,
             };
         }
 

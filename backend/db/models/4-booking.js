@@ -46,7 +46,26 @@ module.exports = (sequelize, DataTypes) => {
       endDate: {
         type: DataTypes.DATE,
         allowNull: false,
-      }
+      },
+      paymentMethod: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: 'mobile_money',
+      },
+      subtotal: DataTypes.DECIMAL,
+      hostCommission: DataTypes.DECIMAL,
+      hostPayout: DataTypes.DECIMAL,
+      guestServiceFee: DataTypes.DECIMAL,
+      processingFee: DataTypes.DECIMAL,
+      totalGuestCharge: DataTypes.DECIMAL,
+      paymentStatus: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: 'pending',
+      },
+      flutterwaveTxRef: DataTypes.STRING,
+      flutterwaveTransactionId: DataTypes.STRING,
+      pawapayDepositId: DataTypes.STRING,
 
     },
     {

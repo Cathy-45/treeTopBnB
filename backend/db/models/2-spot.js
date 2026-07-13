@@ -75,6 +75,44 @@ module.exports = (sequelize, DataTypes) => {
           min: 0,
         },
       },
+      solarPower: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
+      boreholeWater: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
+      backupPower: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
+      securityVerified: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
+      weeklyDiscountPercent: {
+        type: DataTypes.DECIMAL,
+        allowNull: false,
+        defaultValue: 0,
+        validate: {
+          min: 0,
+          max: 100,
+        },
+      },
+      monthlyDiscountPercent: {
+        type: DataTypes.DECIMAL,
+        allowNull: false,
+        defaultValue: 0,
+        validate: {
+          min: 0,
+          max: 100,
+        },
+      },
     },
     {
       sequelize,

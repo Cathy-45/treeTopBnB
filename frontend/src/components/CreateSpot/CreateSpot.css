@@ -65,11 +65,15 @@
 
 .create-spot .field-row {
     display: flex;
+    flex-wrap: nowrap;
     gap: 12px;
 }
 
-.create-spot .field-row > input {
-    flex: 1;
+.create-spot .field-row > input,
+.create-spot .field-row > select {
+    flex: 1 1 0;
+    min-width: 0;
+    width: auto;
 }
 
 .create-spot button[type="submit"] {
@@ -77,4 +81,70 @@
     margin-top: 24px;
     font-size: 16px;
     padding: 12px 20px;
+}
+
+.create-spot .use-location-btn {
+    background-color: var(--bg-surface-alt);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 14px;
+    margin: 4px 0;
+}
+
+.create-spot .use-location-btn:hover {
+    background-color: var(--bg-elevated);
+    border-color: var(--accent);
+}
+
+.create-spot .use-location-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.create-spot .amenities-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin: 8px 0 4px;
+}
+
+.create-spot .amenity-checkbox {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 10px;
+    align-items: center;
+    background-color: var(--bg-surface-alt);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    cursor: pointer;
+}
+
+.create-spot .amenity-checkbox input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    padding: 0;
+    margin: 0;
+    grid-row: 1 / 3;
+    accent-color: var(--accent);
+}
+
+.create-spot .amenity-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.create-spot .amenity-hint {
+    font-size: 11px;
+    color: var(--text-muted);
+    grid-column: 2;
+}
+
+@media (max-width: 500px) {
+    .create-spot .amenities-grid {
+        grid-template-columns: 1fr;
+    }
 }

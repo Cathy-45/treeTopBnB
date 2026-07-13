@@ -63,6 +63,35 @@
     margin-bottom: 12px;
 }
 
+.amenities-summary {
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border-soft);
+    margin-bottom: 24px;
+}
+
+.amenities-summary h3 {
+    font-size: 18px;
+    margin-bottom: 12px;
+}
+
+.amenities-summary-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 10px;
+}
+
+.amenity-summary-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--text-primary);
+}
+
+.amenity-summary-icon {
+    font-size: 16px;
+}
+
 .reviews-list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -77,10 +106,89 @@
     padding: 14px 16px;
 }
 
+.nearby-experiences {
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border-soft);
+}
+
+.nearby-experiences h3 {
+    font-size: 18px;
+    margin-bottom: 12px;
+}
+
+.nearby-experiences-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 14px;
+}
+
+.nearby-experience-card {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: opacity 0.15s ease;
+}
+
+.nearby-experience-card:hover {
+    opacity: 0.9;
+}
+
+.nearby-experience-image {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+    background-color: var(--bg-surface-alt);
+    display: block;
+}
+
+.nearby-experience-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 8px 2px 0;
+}
+
+.nearby-experience-category {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.nearby-experience-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.nearby-experience-price {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
 .review-meta {
     font-size: 13px;
     color: var(--text-muted);
     margin-bottom: 4px;
+}
+
+.longstay-hint {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: -10px 0 16px;
+}
+
+.longstay-hint span {
+    background-color: rgba(218, 109, 32, 0.15);
+    color: var(--accent);
+    border: 1px solid rgba(218, 109, 32, 0.35);
+    border-radius: var(--radius-pill);
+    padding: 3px 10px;
+    font-size: 11px;
+    font-weight: 600;
 }
 
 /* ---- Booking sidebar ---- */

@@ -5,6 +5,7 @@ const { Spot, Booking, User } = require("../../db/models");
 const { EmptyResultError } = require("sequelize");
 const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
+const { calculateBookingPrice } = require("../../utils/pricing");
 const router = express.Router();
 
 const validateBooking = [
@@ -59,6 +60,14 @@ const validateBookingId = (req, res, next) => {
         userId: booking.userId,
         startDate: booking.startDate,
         endDate: booking.endDate,
+        paymentMethod: booking.paymentMethod,
+        subtotal: booking.subtotal,
+        hostCommission: booking.hostCommission,
+        hostPayout: booking.hostPayout,
+        guestServiceFee: booking.guestServiceFee,
+        processingFee: booking.processingFee,
+        totalGuestCharge: booking.totalGuestCharge,
+        paymentStatus: booking.paymentStatus,
         createdAt: booking.createdAt,
         updatedAt: booking.updatedAt,
       }))
@@ -89,12 +98,32 @@ router.put("/:bookingId", validateBooking, validateBookingId, requireAuth, async
         }
 
         const spotId = booking.spotId;
+        const spot = await Spot.findByPk(spotId);
+
+        const nights = Math.max(
+          1,
+          Math.round((new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24))
+        );
+        const pricing = spot
+          ? calculateBookingPrice(Number(spot.price), nights, booking.paymentMethod, {
+              weeklyDiscountPercent: spot.weeklyDiscountPercent,
+              monthlyDiscountPercent: spot.monthlyDiscountPercent,
+            })
+          : null;
 
         const newBooking = await booking.update({
           spotId,
           userId: req.user.id,
           startDate,
-          endDate
+          endDate,
+          ...(pricing && {
+            subtotal: pricing.subtotal,
+            hostCommission: pricing.hostCommission,
+            hostPayout: pricing.hostPayout,
+            guestServiceFee: pricing.guestServiceFee,
+            processingFee: pricing.processingFee,
+            totalGuestCharge: pricing.totalGuestCharge,
+          }),
         });
 
         return res.status(200).json({
@@ -103,6 +132,13 @@ router.put("/:bookingId", validateBooking, validateBookingId, requireAuth, async
           userId: req.user.id,
           startDate: newBooking.startDate,
           endDate: newBooking.endDate,
+          paymentMethod: newBooking.paymentMethod,
+          subtotal: newBooking.subtotal,
+          hostCommission: newBooking.hostCommission,
+          hostPayout: newBooking.hostPayout,
+          guestServiceFee: newBooking.guestServiceFee,
+          processingFee: newBooking.processingFee,
+          totalGuestCharge: newBooking.totalGuestCharge,
           createdAt: newBooking.createdAt,
           updatedAt: newBooking.updatedAt,
 

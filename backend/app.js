@@ -11,6 +11,7 @@ const { environment } = require('./config');
 const isProduction = environment === 'production';
 const app = express();
 const routes = require('./routes')
+const webhooksRouter = require('./routes/api/webhooks')
 
 app.use(morgan('dev'))
 app.use(cookieParser());
@@ -19,18 +20,21 @@ app.use(express.json());
 
 
 if (!isProduction) {
-    
+
     app.use(cors());
   }
-  
-  
+
+
   app.use(
     helmet.crossOriginResourcePolicy({
       policy: "cross-origin"
     })
   );
-  
-  
+
+  // Flutterwave's webhook has no session/CSRF cookie, so it's mounted here,
+  // BEFORE csurf, rather than inside routes/api/index.js like everything else.
+  app.use('/api/webhooks', webhooksRouter);
+
   app.use(
     csurf({
       cookie: {

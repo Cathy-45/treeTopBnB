@@ -60,3 +60,86 @@
     color: var(--text-primary);
     border: 1px solid var(--border);
 }
+
+.payment-method-note {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin: -4px 0 0;
+}
+
+.price-breakdown {
+    background-color: var(--bg-surface-alt);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.price-total {
+    border-top: 1px solid var(--border);
+    padding-top: 6px;
+    margin-top: 2px;
+    font-weight: 700;
+    color: var(--text-primary);
+    font-size: 14px;
+}
+
+.discount-banner {
+    background-color: rgba(218, 109, 32, 0.15);
+    color: var(--accent);
+    border: 1px solid rgba(218, 109, 32, 0.35);
+    border-radius: var(--radius-sm);
+    padding: 8px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.payment-processing {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: var(--bg-surface-alt);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.payment-success-banner {
+    background-color: rgba(34, 160, 90, 0.15);
+    color: #2fa968;
+    border: 1px solid rgba(34, 160, 90, 0.35);
+    border-radius: var(--radius-sm);
+    padding: 8px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.spinner {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

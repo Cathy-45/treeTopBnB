@@ -1,0 +1,140 @@
+.modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 16px;
+    box-sizing: border-box;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+}
+
+.book-experience-modal.modal-content {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border);
+    padding: 24px;
+    border-radius: var(--radius-lg);
+    width: min(320px, 90vw);
+    max-height: 90vh;
+    overflow-y: auto;
+    box-sizing: border-box;
+    box-shadow: var(--shadow-lg);
+}
+
+.book-experience-modal h2 {
+    font-size: 18px;
+    margin-bottom: 6px;
+}
+
+.book-experience-modal form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.book-experience-modal label {
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    color: var(--text-secondary);
+    gap: 6px;
+}
+
+.book-experience-modal .error {
+    color: var(--danger);
+    font-size: 13px;
+}
+
+.book-experience-modal button[type="button"] {
+    background-color: var(--bg-surface-alt);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+}
+
+.payment-method-note {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin: -4px 0 0;
+}
+
+.price-breakdown {
+    background-color: var(--bg-surface-alt);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.price-total {
+    border-top: 1px solid var(--border);
+    padding-top: 6px;
+    margin-top: 2px;
+    font-weight: 700;
+    color: var(--text-primary);
+    font-size: 14px;
+}
+
+.discount-banner {
+    background-color: rgba(218, 109, 32, 0.15);
+    color: var(--accent);
+    border: 1px solid rgba(218, 109, 32, 0.35);
+    border-radius: var(--radius-sm);
+    padding: 8px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.payment-processing {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: var(--bg-surface-alt);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.payment-success-banner {
+    background-color: rgba(34, 160, 90, 0.15);
+    color: #2fa968;
+    border: 1px solid rgba(34, 160, 90, 0.35);
+    border-radius: var(--radius-sm);
+    padding: 8px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.spinner {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

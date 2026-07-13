@@ -1,0 +1,27 @@
+.payment-callback {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+    padding: 24px;
+}
+
+.payment-callback-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+    box-shadow: var(--shadow-md);
+}
+
+.payment-callback-card h1 {
+    font-size: 22px;
+    margin-bottom: 8px;
+}
+
+.payment-callback-card p {
+    margin-bottom: 20px;
+}

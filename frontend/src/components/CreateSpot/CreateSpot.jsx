@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createSpotThunk, addSpotImageThunk } from '../../store/spots';
 import { ZAMBIA_PROVINCES, ZAMBIA_CITIES, CITY_SUBURBS, CITY_TO_PROVINCE } from '../../constants/zambiaLocations';
+import { SPOT_AMENITIES } from '../../constants/amenities';
 import './CreateSpot.css';
 
 const CreateSpot = () => {
@@ -19,8 +20,44 @@ const CreateSpot = () => {
         imageUrls: ['', ''],
         lat: '-15.3875',
         lng: '28.3228',
+        solarPower: false,
+        boreholeWater: false,
+        backupPower: false,
+        securityVerified: false,
+        weeklyDiscountPercent: '',
+        monthlyDiscountPercent: '',
     });
     const [errors, setErrors] = useState({});
+    const [locating, setLocating] = useState(false);
+
+    const handleUseLocation = () => {
+        if (!navigator.geolocation) {
+            setErrors((prev) => ({ ...prev, location: 'Your browser does not support location detection.' }));
+            return;
+        }
+        setLocating(true);
+        setErrors((prev) => ({ ...prev, location: undefined }));
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                setForm((prev) => ({
+                    ...prev,
+                    lat: position.coords.latitude.toFixed(6),
+                    lng: position.coords.longitude.toFixed(6),
+                }));
+                setLocating(false);
+            },
+            (err) => {
+                setErrors((prev) => ({
+                    ...prev,
+                    location: err.code === err.PERMISSION_DENIED
+                        ? 'Location access denied. You can still enter latitude/longitude manually.'
+                        : 'Could not detect your location. You can still enter it manually.',
+                }));
+                setLocating(false);
+            },
+            { enableHighAccuracy: true, timeout: 10000 }
+        );
+    };
 
     const handleInputChange = (e, fieldName) => {
         const { value } = e.target;
@@ -40,6 +77,13 @@ const CreateSpot = () => {
                 state: matchedProvince || prevForm.state,
             };
         });
+    };
+
+    const handleAmenityToggle = (key) => {
+        setForm((prevForm) => ({
+            ...prevForm,
+            [key]: !prevForm[key],
+        }));
     };
 
     const handleImageUrlChange = (index, value) => {
@@ -83,6 +127,12 @@ const CreateSpot = () => {
             description: form.description,
             price: parseFloat(form.price),
             imageUrls: form.imageUrls,
+            solarPower: form.solarPower,
+            boreholeWater: form.boreholeWater,
+            backupPower: form.backupPower,
+            securityVerified: form.securityVerified,
+            weeklyDiscountPercent: form.weeklyDiscountPercent ? parseFloat(form.weeklyDiscountPercent) : 0,
+            monthlyDiscountPercent: form.monthlyDiscountPercent ? parseFloat(form.monthlyDiscountPercent) : 0,
         };
 
         try {
@@ -176,7 +226,16 @@ const CreateSpot = () => {
                         onChange={(e) => handleInputChange(e, 'lng')}
                     />
                 </div>
-                <p className="field-hint">Defaults to central Lusaka (-15.3875, 28.3228) — adjust to your property&apos;s real location.</p>
+                <button
+                    type="button"
+                    className="use-location-btn"
+                    onClick={handleUseLocation}
+                    disabled={locating}
+                >
+                    {locating ? 'Detecting location...' : 'Use my current GPS location'}
+                </button>
+                {errors.location && <p className="error">{errors.location}</p>}
+                <p className="field-hint">Defaults to central Lusaka (-15.3875, 28.3228) — adjust to your property&apos;s real location, or use GPS above.</p>
 
                 <h2>Describe your place to guests</h2>
                 <p>Mention the best features of your space, any special amenities like fast wifi or parking, and what you love about the neighborhood.</p>
@@ -204,6 +263,45 @@ const CreateSpot = () => {
                     onChange={(e) => handleInputChange(e, 'price')}
                 />
                 {errors.price && <p className="error">{errors.price}</p>}
+
+                <h2>Long-stay discounts</h2>
+                <p>Optional — offer a lower nightly rate for week-plus or month-plus stays. Popular with business travelers doing project work in Lusaka/Ndola.</p>
+                <div className="field-row">
+                    <input
+                        type="number"
+                        min="0"
+                        max="100"
+                        placeholder="Weekly discount %"
+                        value={form.weeklyDiscountPercent}
+                        onChange={(e) => handleInputChange(e, 'weeklyDiscountPercent')}
+                    />
+                    <input
+                        type="number"
+                        min="0"
+                        max="100"
+                        placeholder="Monthly discount %"
+                        value={form.monthlyDiscountPercent}
+                        onChange={(e) => handleInputChange(e, 'monthlyDiscountPercent')}
+                    />
+                </div>
+                <p className="field-hint">Weekly applies at 7+ nights, monthly at 28+ nights. Leave at 0 to skip.</p>
+
+                <h2>Amenities &amp; security</h2>
+                <p>Zambian guests care about this — let them know what's on offer.</p>
+                <div className="amenities-grid">
+                    {SPOT_AMENITIES.map(({ key, label, icon, formHint }) => (
+                        <label key={key} className="amenity-checkbox">
+                            <input
+                                type="checkbox"
+                                checked={form[key]}
+                                onChange={() => handleAmenityToggle(key)}
+                            />
+                            <span className="amenity-label">{icon} {label}</span>
+                            <span className="amenity-hint">{formHint}</span>
+                        </label>
+                    ))}
+                </div>
+
                 <h2>Liven up your spot with photos</h2>
                 <p>Submit a link to at least one photo to publish your spot.</p>
                 <input

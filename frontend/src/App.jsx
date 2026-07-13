@@ -20,6 +20,10 @@ import ConfirmationModal from './components/ConfirmationModal';
 import ReviewList from './components/ReviewList';
 import Review from './components/Review';
 import DeleteReview from './components/DeleteReview';
+import Experiences from './components/Experiences/Experiences';
+import ExperienceDetails from './components/ExperienceDetails/ExperienceDetails';
+import CreateExperience from './components/CreateExperience/CreateExperience';
+import PaymentCallback from './components/PaymentCallback/PaymentCallback';
 
 function Layout() {
   const dispatch = useDispatch();
@@ -119,7 +123,27 @@ const router = createBrowserRouter([
       {
         path: '/mangespottile',
         element: <ManageSpotTile />
-      }
+      },
+
+      {
+        path: '/experiences',
+        element: <Experiences />,
+      },
+
+      {
+        path: '/experiences/:id',
+        element: <ExperienceDetails />,
+      },
+
+      {
+        path: '/createexperience',
+        element: <CreateExperience />,
+      },
+
+      {
+        path: '/payment/callback',
+        element: <PaymentCallback />,
+      },
 
 
     ]

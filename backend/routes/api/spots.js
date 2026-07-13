@@ -17,6 +17,9 @@ const {
 const { EmptyResultError, Op } = require("sequelize");
 const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
+const { calculateBookingPrice } = require("../../utils/pricing");
+const flutterwave = require("../../utils/flutterwave");
+const pawapay = require("../../utils/pawapay");
 const router = express.Router();
 
 const bcrypt = require("bcryptjs");
@@ -40,6 +43,12 @@ const validateSpot = [
   check("price")
     .isFloat({ min: 0 })
     .withMessage("Price must be a positive number"),
+  check("solarPower").optional().isBoolean().withMessage("solarPower must be true or false"),
+  check("boreholeWater").optional().isBoolean().withMessage("boreholeWater must be true or false"),
+  check("backupPower").optional().isBoolean().withMessage("backupPower must be true or false"),
+  check("securityVerified").optional().isBoolean().withMessage("securityVerified must be true or false"),
+  check("weeklyDiscountPercent").optional().isFloat({ min: 0, max: 100 }).withMessage("weeklyDiscountPercent must be between 0 and 100"),
+  check("monthlyDiscountPercent").optional().isFloat({ min: 0, max: 100 }).withMessage("monthlyDiscountPercent must be between 0 and 100"),
   handleValidationErrors,
 ];
 
@@ -56,8 +65,20 @@ const validateSpotId = (req, res, next) => {
 
 router.get("/", async (req, res, next) => {
   try {
-    let { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } =
-      req.query;
+    let {
+      page,
+      size,
+      minLat,
+      maxLat,
+      minLng,
+      maxLng,
+      minPrice,
+      maxPrice,
+      solarPower,
+      boreholeWater,
+      backupPower,
+      securityVerified,
+    } = req.query;
 
     const errors = {};
 
@@ -112,6 +133,11 @@ router.get("/", async (req, res, next) => {
       }
     }
 
+    if (solarPower === "true") where.solarPower = true;
+    if (boreholeWater === "true") where.boreholeWater = true;
+    if (backupPower === "true") where.backupPower = true;
+    if (securityVerified === "true") where.securityVerified = true;
+
     if (Object.keys(errors).length > 0) {
       return res.status(400).json({ message: "Bad Request", errors });
     }
@@ -144,6 +170,12 @@ router.get("/", async (req, res, next) => {
         name: spot.name,
         description: spot.description,
         price: spot.price,
+        solarPower: spot.solarPower,
+        boreholeWater: spot.boreholeWater,
+        backupPower: spot.backupPower,
+        securityVerified: spot.securityVerified,
+        weeklyDiscountPercent: spot.weeklyDiscountPercent,
+        monthlyDiscountPercent: spot.monthlyDiscountPercent,
         createdAt: spot.createdAt,
         updatedAt: spot.updatedAt,
         avgRating,
@@ -225,6 +257,12 @@ router.get("/:spotId", validateSpotId, async (req, res, next) => {
       name: spotData.name,
       description: spotData.description,
       price: spotData.price,
+      solarPower: spotData.solarPower,
+      boreholeWater: spotData.boreholeWater,
+      backupPower: spotData.backupPower,
+      securityVerified: spotData.securityVerified,
+      weeklyDiscountPercent: spotData.weeklyDiscountPercent,
+      monthlyDiscountPercent: spotData.monthlyDiscountPercent,
       createdAt: spotData.createdAt,
       updatedAt: spotData.updatedAt,
       numReviews: numReviews,
@@ -331,6 +369,12 @@ router.post("/", requireAuth, validateSpot, async (req, res, next) => {
       name,
       description,
       price,
+      solarPower,
+      boreholeWater,
+      backupPower,
+      securityVerified,
+      weeklyDiscountPercent,
+      monthlyDiscountPercent,
     } = req.body;
 
     const ownerId = req.user.id;
@@ -346,6 +390,12 @@ router.post("/", requireAuth, validateSpot, async (req, res, next) => {
       name,
       description,
       price,
+      solarPower: !!solarPower,
+      boreholeWater: !!boreholeWater,
+      backupPower: !!backupPower,
+      securityVerified: !!securityVerified,
+      weeklyDiscountPercent: weeklyDiscountPercent || 0,
+      monthlyDiscountPercent: monthlyDiscountPercent || 0,
     });
 
     return res.status(201).json({
@@ -360,6 +410,12 @@ router.post("/", requireAuth, validateSpot, async (req, res, next) => {
       name: name,
       description: description,
       price: price,
+      solarPower: spot.solarPower,
+      boreholeWater: spot.boreholeWater,
+      backupPower: spot.backupPower,
+      securityVerified: spot.securityVerified,
+      weeklyDiscountPercent: spot.weeklyDiscountPercent,
+      monthlyDiscountPercent: spot.monthlyDiscountPercent,
       createdAt: spot.createdAt,
       updatedAt: spot.updatedAt,
     });
@@ -420,6 +476,12 @@ router.put(
       name,
       description,
       price,
+      solarPower,
+      boreholeWater,
+      backupPower,
+      securityVerified,
+      weeklyDiscountPercent,
+      monthlyDiscountPercent,
     } = req.body;
 
     const spot = await Spot.findByPk(spotId);
@@ -442,6 +504,12 @@ router.put(
         name,
         description,
         price,
+        solarPower: !!solarPower,
+        boreholeWater: !!boreholeWater,
+        backupPower: !!backupPower,
+        securityVerified: !!securityVerified,
+        weeklyDiscountPercent: weeklyDiscountPercent || 0,
+        monthlyDiscountPercent: monthlyDiscountPercent || 0,
       });
 
       return res.status(200).json({
@@ -456,6 +524,12 @@ router.put(
         name: spot.name,
         description: spot.description,
         price: spot.price,
+        solarPower: spot.solarPower,
+        boreholeWater: spot.boreholeWater,
+        backupPower: spot.backupPower,
+        securityVerified: spot.securityVerified,
+        weeklyDiscountPercent: spot.weeklyDiscountPercent,
+        monthlyDiscountPercent: spot.monthlyDiscountPercent,
         createdAt: spot.createdAt,
         updatedAt: spot.updatedAt,
       });
@@ -566,7 +640,7 @@ router.post(
   async (req, res, next) => {
     try {
       const { spotId } = req.params;
-      const { startDate, endDate } = req.body;
+      const { startDate, endDate, paymentMethod, phoneNumber, provider } = req.body;
 
       const spot = await Spot.findByPk(spotId);
       if (!spot) {
@@ -577,12 +651,71 @@ router.post(
         return res.status(403).json({ message: "Forbidden" });
       }
 
+      const nights = Math.max(
+        1,
+        Math.round((new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24))
+      );
+      const pricing = calculateBookingPrice(Number(spot.price), nights, paymentMethod, {
+        weeklyDiscountPercent: spot.weeklyDiscountPercent,
+        monthlyDiscountPercent: spot.monthlyDiscountPercent,
+      });
+
       const newBooking = await Booking.create({
         spotId,
         userId: req.user.id,
         startDate,
         endDate,
+        paymentMethod: pricing.paymentMethod,
+        subtotal: pricing.subtotal,
+        hostCommission: pricing.hostCommission,
+        hostPayout: pricing.hostPayout,
+        guestServiceFee: pricing.guestServiceFee,
+        processingFee: pricing.processingFee,
+        totalGuestCharge: pricing.totalGuestCharge,
       });
+
+      // Active gateway: PawaPay direct-charge (POST /v2/deposits), the same
+      // pattern already proven in production on FarmLink/AgriConnect — no
+      // redirect, the guest gets a PIN prompt straight on their phone.
+      // Flutterwave requires $5M+/year to go live in Zambia and is on hold;
+      // its wrapper/columns are left in place for when card support becomes
+      // available. Booking itself always succeeds even if the charge fails
+      // or isn't configured — paymentStatus reflects the real outcome so the
+      // rest of the app keeps working without a live gateway account.
+      let depositStatus = null;
+      let paymentFailureReason = null;
+      if (pricing.paymentMethod === 'mobile_money') {
+        if (!phoneNumber || !provider) {
+          await newBooking.update({ paymentStatus: 'unavailable' });
+        } else {
+          try {
+            const result = await pawapay.initializePayment({
+              amount: Number(pricing.totalGuestCharge),
+              currency: 'ZMW',
+              phoneNumber,
+              provider,
+              reason: `ZedBnB stay booking ${newBooking.id}`,
+              clientReferenceId: `spot-booking-${newBooking.id}`,
+            });
+            depositStatus = result.status;
+            paymentFailureReason = result.failureReason;
+            if (!result.configured) {
+              await newBooking.update({ paymentStatus: 'unavailable' });
+            } else if (result.status === 'ACCEPTED' || result.status === 'DUPLICATE_IGNORED') {
+              await newBooking.update({ pawapayDepositId: result.depositId, paymentStatus: 'awaiting_payment' });
+            } else {
+              // REJECTED — e.g. invalid phone/provider, provider outage.
+              await newBooking.update({ pawapayDepositId: result.depositId, paymentStatus: 'failed' });
+            }
+          } catch (paymentErr) {
+            console.error('Error initializing PawaPay payment for booking:', paymentErr.message);
+            await newBooking.update({ paymentStatus: 'unavailable' });
+          }
+        }
+      } else {
+        // Card payments aren't live yet (Flutterwave blocked, DPO pending).
+        await newBooking.update({ paymentStatus: 'unavailable' });
+      }
 
       return res.status(201).json({
         id: newBooking.id,
@@ -590,6 +723,19 @@ router.post(
         userId: req.user.id,
         startDate: newBooking.startDate,
         endDate: newBooking.endDate,
+        paymentMethod: newBooking.paymentMethod,
+        subtotal: newBooking.subtotal,
+        hostCommission: newBooking.hostCommission,
+        hostPayout: newBooking.hostPayout,
+        guestServiceFee: newBooking.guestServiceFee,
+        processingFee: newBooking.processingFee,
+        totalGuestCharge: newBooking.totalGuestCharge,
+        discountLabel: pricing.discountLabel,
+        discountAmount: pricing.discountAmount,
+        paymentStatus: newBooking.paymentStatus,
+        depositId: newBooking.pawapayDepositId,
+        depositStatus,
+        paymentFailureReason,
         createdAt: newBooking.createdAt,
         updatedAt: newBooking.updatedAt,
       });

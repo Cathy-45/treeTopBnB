@@ -30,27 +30,23 @@
 }
 
 .logo {
-    width: 34px;
-    height: 34px;
+    height: 42px;
+    width: auto;
     object-fit: contain;
-}
-
-.site_name {
-    font-size: 20px;
-    font-weight: 800;
-    color: var(--accent);
-    letter-spacing: -0.02em;
+    display: block;
 }
 
 .navbar_search {
     display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
     align-items: center;
     gap: 8px;
     flex: 0 1 260px;
     background-color: var(--bg-surface-alt);
     border: 1px solid var(--border);
     border-radius: var(--radius-pill);
-    padding: 8px 14px;
+    padding: 8px 8px 8px 14px;
 }
 
 .navbar_search .search_input {
@@ -59,7 +55,7 @@
     padding: 0;
     margin: 0;
     width: auto;
-    flex: 1;
+    flex: 1 1 auto;
     min-width: 0;
     font-size: 14px;
 }
@@ -68,20 +64,37 @@
     outline: none;
 }
 
-.navbar_search .search_icon {
+.navbar_search .search_button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
     color: var(--text-muted);
-    background-color: transparent;
-    width: 15px;
-    height: 15px;
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    margin: 0;
+    border: none;
+    border-radius: 50%;
     cursor: pointer;
     flex-shrink: 0;
+}
+
+.navbar_search .search_button:hover {
+    background-color: var(--bg-elevated);
+    color: var(--accent);
+}
+
+.navbar_search .search_icon {
+    width: 14px;
+    height: 14px;
 }
 
 .navbar_search:focus-within {
     border-color: var(--accent);
 }
 
-.navbar_search:focus-within .search_icon {
+.navbar_search:focus-within .search_button {
     color: var(--accent);
 }
 
@@ -93,7 +106,8 @@
     flex-shrink: 0;
 }
 
-.create-spot-link {
+.create-spot-link,
+.experiences-link {
     text-decoration: none;
     color: var(--text-primary);
     font-weight: 600;
@@ -103,7 +117,8 @@
     transition: background-color 0.15s ease;
 }
 
-.create-spot-link:hover {
+.create-spot-link:hover,
+.experiences-link:hover {
     background-color: var(--bg-surface-alt);
     text-decoration: none;
 }
@@ -112,7 +127,8 @@
     .navbar_search {
         flex: 1 1 auto;
     }
-    .create-spot-link {
+    .create-spot-link,
+    .experiences-link {
         display: none;
     }
 }
@@ -122,8 +138,8 @@
         gap: 12px;
         padding: 10px 16px;
     }
-    .site_name {
-        display: none;
+    .logo {
+        height: 34px;
     }
     .navbar_right {
         gap: 10px;

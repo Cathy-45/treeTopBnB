@@ -1,0 +1,93 @@
+.experience-details {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+}
+
+.experience-details-header h1 {
+    font-size: 28px;
+    margin-bottom: 8px;
+}
+
+.experience-details-subheader {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-secondary);
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.category-badge-inline {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.dot {
+    color: var(--text-muted);
+}
+
+.experience-details-image {
+    width: 100%;
+    max-height: 420px;
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+    background-color: var(--bg-surface-alt);
+    display: block;
+    margin-bottom: 32px;
+}
+
+.experience-details-body {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 48px;
+    align-items: start;
+}
+
+@media (max-width: 860px) {
+    .experience-details-body {
+        grid-template-columns: 1fr;
+    }
+}
+
+.experience-details-main {
+    min-width: 0;
+}
+
+.provider-info h3 {
+    font-size: 18px;
+}
+
+.booking-card {
+    position: sticky;
+    top: 90px;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    box-shadow: var(--shadow-md);
+}
+
+.booking-price {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+}
+
+.booking-price span {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text-secondary);
+}
+
+.booking-card-btn {
+    width: 100%;
+}
+
+.owner-note {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 14px;
+    margin: 0;
+}

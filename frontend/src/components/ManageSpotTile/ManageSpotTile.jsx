@@ -1,9 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import outdoorImage from '../../images/outdoors.jpg';
+import { SPOT_AMENITIES } from '../../constants/amenities';
 import './ManageSpotTile.css';
 
 const ManageSpotTile = ({ spot, onDeleteClick }) => {
     const navigate = useNavigate();
+    const badges = SPOT_AMENITIES.filter(({ key }) => !!spot[key]);
 
     const handleSpotClick = () => {
         navigate(`/spots/${spot.id}`); 
@@ -21,12 +23,21 @@ const ManageSpotTile = ({ spot, onDeleteClick }) => {
 
     return (
         <div className="spot-tile" onClick={handleSpotClick}>
-            <img
-                src={spot.previewImage || outdoorImage}
-                alt={spot.name}
-                className='spot_image'
-                onError={(e) => { e.target.onerror = null; e.target.src = outdoorImage; }}
-            />
+            <div className="spot-tile-image-wrap">
+                <img
+                    src={spot.previewImage || outdoorImage}
+                    alt={spot.name}
+                    className='spot_image'
+                    onError={(e) => { e.target.onerror = null; e.target.src = outdoorImage; }}
+                />
+                {badges.length > 0 && (
+                    <div className="spot_badges">
+                        {badges.map(({ key, icon, label }) => (
+                            <span key={key} className="spot_badge" title={label}>{icon}</span>
+                        ))}
+                    </div>
+                )}
+            </div>
             <div className='spot_details'>
                 <div className='spot_location'>{spot.city}, {spot.state}</div>
                 <div className='rating'>

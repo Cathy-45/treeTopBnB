@@ -43,13 +43,13 @@ export const clearBookingError = () => ({
 // Create a booking for a spot. Mirrors the backend's actual error shape
 // (400 validation, 403 conflict) so the UI can show a real message instead
 // of a generic failure.
-export const createBookingThunk = (spotId, { startDate, endDate }) => async (dispatch) => {
+export const createBookingThunk = (spotId, { startDate, endDate, paymentMethod, phoneNumber, provider }) => async (dispatch) => {
     dispatch(clearBookingError());
     try {
         const response = await csrfFetch(`/api/spots/${spotId}/bookings`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ startDate, endDate }),
+            body: JSON.stringify({ startDate, endDate, paymentMethod, phoneNumber, provider }),
         });
         const booking = await response.json();
         dispatch(addBooking(booking));
@@ -69,6 +69,14 @@ export const createBookingThunk = (spotId, { startDate, endDate }) => async (dis
         dispatch(setBookingError(message));
         throw new Error(message);
     }
+};
+
+// Polls the direct-charge deposit status for a booking that's
+// 'awaiting_payment' — the guest is expected to be entering their mobile
+// money PIN on their own phone right about now. Safe to call repeatedly.
+export const checkBookingPaymentStatusThunk = (bookingId, bookingType = 'spot') => async () => {
+    const response = await csrfFetch(`/api/payments/verify-pawapay?bookingId=${encodeURIComponent(bookingId)}&bookingType=${encodeURIComponent(bookingType)}`);
+    return response.json();
 };
 
 export const fetchCurrentUserBookingsThunk = () => async (dispatch) => {

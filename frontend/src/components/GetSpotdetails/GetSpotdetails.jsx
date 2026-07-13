@@ -1,8 +1,11 @@
 
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { getSpotdetailsThunk, loadReviewsThunk, postReviewThunk } from '../../store/spots';
+import { getAllExperiencesThunk } from '../../store/experiences';
+import { SPOT_AMENITIES } from '../../constants/amenities';
+import { getCategoryMeta } from '../../constants/experienceCategories';
 import './GetSpotDetails.css';
 import ReviewFormModal from '../ReviewFormModal';
 import BookSpot from '../BookSpot';
@@ -22,6 +25,7 @@ const GetSpotDetails = () => {
     const loading = useSelector((state) => state.spots.loading);
     const error = useSelector((state) => state.spots.error);
     const sessionUser = useSelector((state) => state.session.user);
+    const allExperiences = useSelector((state) => state.experiences.allExperiences);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isBookingOpen, setIsBookingOpen] = useState(false);
@@ -29,6 +33,7 @@ const GetSpotDetails = () => {
     useEffect(() => {
         dispatch(getSpotdetailsThunk(id));
         dispatch(loadReviewsThunk(id));
+        dispatch(getAllExperiencesThunk());
     }, [dispatch, id]);
 
     if (loading) return <div>Loading...</div>;
@@ -45,6 +50,8 @@ const GetSpotDetails = () => {
         price,
         avgStarRating,
         numReviews,
+        weeklyDiscountPercent,
+        monthlyDiscountPercent,
     } = currentSpot;
 
     const averageRating = avgStarRating && !Number.isNaN(avgStarRating) ? Number(avgStarRating).toFixed(1) : null;
@@ -59,6 +66,12 @@ const GetSpotDetails = () => {
         await dispatch(postReviewThunk(id, { review: reviewText, stars: Number(rating) }));
         dispatch(loadReviewsThunk(id));
     };
+
+    const activeAmenities = SPOT_AMENITIES.filter(({ key }) => !!currentSpot[key]);
+
+    const nearbyExperiences = (allExperiences || [])
+        .filter((experience) => experience.city === city)
+        .slice(0, 4);
 
     const spotImages = currentSpot.SpotImages && currentSpot.SpotImages.length > 0
         ? currentSpot.SpotImages
@@ -89,6 +102,20 @@ const GetSpotDetails = () => {
                         <p>{description}</p>
                     </div>
 
+                    {activeAmenities.length > 0 && (
+                        <div className="amenities-summary">
+                            <h3>What this place offers</h3>
+                            <div className="amenities-summary-list">
+                                {activeAmenities.map(({ key, icon, label }) => (
+                                    <div key={key} className="amenity-summary-item">
+                                        <span className="amenity-summary-icon">{icon}</span>
+                                        {label}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
                     <div className="review-summary">
                         <h3>
                             ⭐ {averageRating || 'New'} {reviewCount > 0 && `· ${reviewCount} review${reviewCount === 1 ? '' : 's'}`}
@@ -118,10 +145,45 @@ const GetSpotDetails = () => {
                             <button onClick={() => alert("Please log in to leave a review.")}>Post A Review</button>
                         )}
                     </div>
+
+                    {nearbyExperiences.length > 0 && (
+                        <div className="nearby-experiences">
+                            <h3>Popular experiences near {city}</h3>
+                            <div className="nearby-experiences-list">
+                                {nearbyExperiences.map((experience) => {
+                                    const meta = getCategoryMeta(experience.category);
+                                    return (
+                                        <Link key={experience.id} to={`/experiences/${experience.id}`} className="nearby-experience-card">
+                                            <img
+                                                src={experience.previewImage || 'https://picsum.photos/seed/zedbnbexperience/400/300'}
+                                                alt={experience.title}
+                                                className="nearby-experience-image"
+                                            />
+                                            <div className="nearby-experience-info">
+                                                <span className="nearby-experience-category">{meta.icon} {meta.label}</span>
+                                                <span className="nearby-experience-title">{experience.title}</span>
+                                                <span className="nearby-experience-price">${experience.pricePerPerson} / person</span>
+                                            </div>
+                                        </Link>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    )}
                 </div>
 
                 <aside className="booking-card">
                     <p className="booking-price">${price} <span>/ night</span></p>
+                    {(Number(weeklyDiscountPercent) > 0 || Number(monthlyDiscountPercent) > 0) && (
+                        <div className="longstay-hint">
+                            {Number(weeklyDiscountPercent) > 0 && (
+                                <span>{weeklyDiscountPercent}% off weekly</span>
+                            )}
+                            {Number(monthlyDiscountPercent) > 0 && (
+                                <span>{monthlyDiscountPercent}% off monthly</span>
+                            )}
+                        </div>
+                    )}
                     {canBook && (
                         <button className="booking-card-btn" onClick={() => setIsBookingOpen(true)}>Reserve</button>
                     )}
@@ -147,6 +209,8 @@ const GetSpotDetails = () => {
                 onClose={() => setIsBookingOpen(false)}
                 spotId={id}
                 pricePerNight={price}
+                weeklyDiscountPercent={weeklyDiscountPercent}
+                monthlyDiscountPercent={monthlyDiscountPercent}
             />
         </div>
     );

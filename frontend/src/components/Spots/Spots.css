@@ -19,6 +19,7 @@
     text-decoration: none;
     color: inherit;
     display: block;
+    position: relative;
 }
 
 .spot_image {
@@ -28,6 +29,25 @@
     border-radius: var(--radius-md);
     background-color: var(--bg-surface-alt);
     display: block;
+}
+
+.spot_badges {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    display: flex;
+    gap: 4px;
+}
+
+.spot_badge {
+    background-color: rgba(30, 36, 25, 0.75);
+    border-radius: var(--radius-pill);
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
 }
 
 .spot_details {
@@ -60,4 +80,32 @@
     text-align: center;
     color: var(--text-muted);
     font-size: 15px;
+}
+
+.amenity-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.amenity-filter-chip {
+    background-color: var(--bg-surface-alt);
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.amenity-filter-chip:hover {
+    border-color: var(--accent);
+}
+
+.amenity-filter-chip.active {
+    background-color: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
 }
